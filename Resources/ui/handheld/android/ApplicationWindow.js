@@ -1,5 +1,8 @@
 function ApplicationWindow() {
   var self = this;
+  self.largeButtonHeight = 200;
+  self.buttonWidth = 300;
+  self.buttonHeight = 90;
 
   //create object instance
   self.win = Ti.UI.createWindow({

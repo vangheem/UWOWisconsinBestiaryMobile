@@ -350,8 +350,9 @@ function SubmitView(mainView, data, blob) {
 
   self.submitBtn = Ti.UI.createButton({
     title: "Submit",
-    width: '100%',
-    height: 100
+    height: self.application.largeButtonHeight,
+    width: self.application.buttonWidth,
+    image: '/images/check.png'
   });
 
   self.submitBtn.addEventListener('click', function(e){
@@ -482,24 +483,33 @@ function SubmitView(mainView, data, blob) {
   };
 
   self.loadForm = function(html){
-      self.view.add(Ti.UI.createLabel({
-        text: 'Please fill out the form to finish the submission.',
-        borderColor: '#000000',
-        borderRadius: 5,
-        width: 'auto',
-        height: 'auto',
-        backgroundPaddingLeft: 10,
-        backgroundPaddingRight: 10,
-        backgroundPaddingTop: 10,
-        backgroundPaddingBottom: 10,
-        top: 10,
-        right: 10,
-        left: 10,
-        bottom: 10,
-        font: {
-          fontSize: 30
-        } 
+
+    self.view.add(Ti.UI.createLabel({
+      text: 'Please fill out the form to finish the submission.',
+      borderColor: '#000000',
+      borderRadius: 5,
+      width: 'auto',
+      height: 'auto',
+      backgroundPaddingLeft: 10,
+      backgroundPaddingRight: 10,
+      backgroundPaddingTop: 10,
+      backgroundPaddingBottom: 10,
+      top: 10,
+      right: 10,
+      left: 10,
+      bottom: 10,
+      font: {
+        fontSize: 30
+      } 
     }));
+
+    self.view.add(Ti.UI.createImageView({
+      height: 150,
+      width: 'auto',
+      canScale : true,
+      image: self.blob
+    }));
+
     self.formFields = {};
     for(var i=0; i<FIELDS.length; i++){
       var field = FIELDS[i];

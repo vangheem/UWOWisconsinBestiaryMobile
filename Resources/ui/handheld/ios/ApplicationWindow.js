@@ -1,5 +1,8 @@
 function ApplicationWindow() {
   var self = this;
+  self.largeButtonHeight = 90;
+  self.buttonWidth = 300;
+  self.buttonHeight = 40;
 
   //create object instance
   self.mainWin = Ti.UI.createWindow({
@@ -21,7 +24,7 @@ function ApplicationWindow() {
   self.navGroup = Ti.UI.iPhone.createNavigationGroup({
     window: self.masterContainer
   });
-  self.mainWin.add(navGroup);
+  self.mainWin.add(self.navGroup);
 
   self.open = function(){
     self.mainWin.open();

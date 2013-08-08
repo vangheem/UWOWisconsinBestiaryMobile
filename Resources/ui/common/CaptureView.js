@@ -23,32 +23,55 @@ function CaptureView(mainView) {
 
   self.captureBtn = Ti.UI.createButton({
     title: 'Take Picture',
-    top: '10%'
+    top: '1%',
+    image: '/images/photo.png',
+    height: self.application.buttonHeight,
+    width: self.application.buttonWidth
   });
   self.detectCoordinatesBtn = Ti.UI.createButton({
     title: 'Get current coordinates',
-    top: '15%',
-    visible: false
+    top: '14%',
+    visible: false,
+    image: '/images/global.png',
+    height: self.application.buttonHeight,
+    width: self.application.buttonWidth
   });
   self.imageView = Ti.UI.createImageView({
     top: '25%',
-    visible: false
+    visible: false,
+    height: 250,
+    width: 'auto',
+    canScale : true
+  });
+
+
+  self.coordinatesLabel = Ti.UI.createLabel({
+    bottom: '32%',
+    text: ''
   });
 
   self.saveBtn = Ti.UI.createButton({
     title: 'Save for later',
-    bottom: '25%',
-    visible: false
+    bottom: '14%',
+    image: '/images/disk.png',
+    height: self.application.buttonHeight,
+    width: self.application.buttonWidth,
+    enabled: false
   });
   self.submitBtn = Ti.UI.createButton({
     title: 'Submit',
-    bottom: '10%',
-    visible: false
+    bottom: '1%',
+    height: self.application.buttonHeight,
+    width: self.application.buttonWidth,
+    image: '/images/add.png',
+    enabled: false
   });
 
 
   self.win.add(self.view);
   self.view.add(self.captureBtn);
+  self.view.add(self.detectCoordinatesBtn);
+  self.view.add(self.coordinatesLabel);
   self.view.add(self.imageView);
   self.view.add(self.saveBtn);
   self.view.add(self.submitBtn);
@@ -61,12 +84,18 @@ function CaptureView(mainView) {
               'detecting you location and try again.');
         // XXX show a detect coordinates button
         self.detectCoordinatesBtn.setVisible(true);
+        self.coordinatesLabel.setText('No coordinates detected');
         return;
+      } else {
+        self.detectCoordinatesBtn.setVisible(false);
       }
 
       self.longitude = e.coords.longitude;
       self.latitude = e.coords.latitude;
       self.altitude = e.coords.altitude;
+      self.coordinatesLabel.setText('Longitude: ' + self.longitude + '\n' +
+        'Latitude: ' + self.latitude + '\n' +
+        'Altitude: ' + self.altitude + '\n');
     });
   };
 
@@ -89,8 +118,8 @@ function CaptureView(mainView) {
         if(mediaItem.success){
           self.blob = mediaItem.media;
           self.detectCoordinates();
-          self.saveBtn.setVisible(true);
-          self.submitBtn.setVisible(true);
+          self.saveBtn.setEnabled(true);
+          self.submitBtn.setEnabled(true);
           self.captureDate = new Date();
           self.imageView.setImage(self.blob);
           self.imageView.setVisible(true);
