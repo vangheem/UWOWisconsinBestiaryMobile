@@ -1,27 +1,46 @@
-function ApplicationWindow(title) {
+function ApplicationWindow() {
+	//declare module dependencies
+	var MasterView = require('ui/common/MasterView'),
+		DetailView = require('ui/common/DetailView');
+		
+	//create object instance
 	var self = Ti.UI.createWindow({
-		title:title,
-		backgroundColor:'white'
+		backgroundColor:'#ffffff'
 	});
-	
-	var button = Ti.UI.createButton({
-		height:44,
-		width:200,
-		title:L('openWindow'),
-		top:20
+		
+	//construct UI
+	var masterView = new MasterView(),
+		detailView = new DetailView();
+		
+	masterView.borderColor = '#000';
+	masterView.borderWidth = 1;
+		
+	//create master view container
+	var masterContainer = Ti.UI.createView({
+		top:0,
+		bottom:0,
+		left:0,
+		width:240
 	});
-	self.add(button);
+	masterContainer.add(masterView);
+	self.add(masterContainer);
 	
-	button.addEventListener('click', function() {
-		//containingTab attribute must be set by parent tab group on
-		//the window for this work
-		self.containingTab.open(Ti.UI.createWindow({
-			title: L('newWindow'),
-			backgroundColor: 'white'
-		}));
+	//create detail view container
+	var detailContainer = Ti.UI.createView({
+		top:0,
+		bottom:0,
+		right:0,
+		left:240
+	});
+	detailContainer.add(detailView);
+	self.add(detailContainer);
+	
+	//add behavior for master view
+	masterView.addEventListener('itemSelected', function(e) {
+		detailView.fireEvent('itemSelected',e);
 	});
 	
 	return self;
-};
+}
 
 module.exports = ApplicationWindow;

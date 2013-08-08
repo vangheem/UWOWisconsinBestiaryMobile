@@ -6,8 +6,8 @@
     <publisher>nathan</publisher>
     <url>http://</url>
     <description>not specified</description>
-    <copyright/>
-    <icon>bestiarylogo.jpg</icon>
+    <copyright>GPL</copyright>
+    <icon>bestiarylogo.png</icon>
     <persistent-wifi>false</persistent-wifi>
     <prerendered-icon>false</prerendered-icon>
     <statusbar-style>default</statusbar-style>
@@ -41,7 +41,7 @@
         <target device="blackberry">false</target>
         <target device="ipad">true</target>
         <target device="iphone">true</target>
-        <target device="mobileweb">true</target>
+        <target device="mobileweb">false</target>
         <target device="tizen">false</target>
     </deployment-targets>
     <sdk-version>3.1.1.GA</sdk-version>

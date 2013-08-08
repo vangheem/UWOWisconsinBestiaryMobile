@@ -1,6 +1,39 @@
-Welcome to your Appcelerator Titanium Mobile Project
+Rework
+------
 
-This is tabbed application, consisting of multiple stacks of windows associated with tabs in a tab group.  A starting point for tab-based application with multiple top-level windows. Requires Titanium Mobile SDK 1.8.0+.
+Main page
+~~~~~~~~~
+
+- button to capture photo
+- button to review existing captures
+
+
+Photo Capture page
+~~~~~~~~~~~~~~~~~~
+
+- take photo
+- show picture
+- show coordinates if captured
+- get coordinates--if failed
+- manually fill in coordinates
+- submit button(brings them to form to finish filling out)
+- save for later
+
+
+Existing photos
+~~~~~~~~~~~~~~~
+
+- list of existing photos taken
+- delete button
+- submit button(brings them to form to finish filling out)
+
+
+Submit form
+-----------
+
+- fill in the rest of the information
+- submit to server
+
 
 ----------------------------------
 Stuff our legal folk make us say:
