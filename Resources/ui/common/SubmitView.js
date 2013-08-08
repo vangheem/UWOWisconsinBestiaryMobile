@@ -1,4 +1,5 @@
 var Database = require('ui/common/Database');
+var SubmittingView = require('ui/common/SubmittingView');
 
 Ti.include('/ui/lib/htmlparser.js');
 Ti.include('/ui/lib/soupselect.js');
@@ -326,6 +327,7 @@ function SubmitView(mainView, data, blob) {
   self.application = mainView.application;
   self.data = data;
   self.blob = blob;
+  self.submittingView = null;
 
   self.win = Ti.UI.createWindow({
     title: 'Submit photo',
@@ -350,9 +352,15 @@ function SubmitView(mainView, data, blob) {
 
   self.submitBtn = Ti.UI.createButton({
     title: "Submit",
-    height: self.application.largeButtonHeight,
+    height: self.application.buttonHeight,
     width: self.application.buttonWidth,
     image: '/images/check.png'
+  });
+  self.discardBtn = Ti.UI.createButton({
+    title: "Discard",
+    height: self.application.buttonHeight - 20,
+    width: self.application.buttonWidth,
+    image: '/images/delete.png'
   });
 
   self.submitBtn.addEventListener('click', function(e){
@@ -416,10 +424,14 @@ function SubmitView(mainView, data, blob) {
     }
     formData['date-photo-was-taken_day'] = day;
 
+    self.submittingView = new SubmittingView();
+    self.submittingView.open();
+
     self.req = Ti.Network.createHTTPClient();
     setRequestHeaders(self.req);
     self.req.onload = function(resp){
       var handler = new htmlparser.DefaultHandler(function(err, dom) {
+        self.submittingView.close();
         if (err) {
           alert('Error: ' + err);
         } else {
@@ -452,11 +464,14 @@ function SubmitView(mainView, data, blob) {
               message: 'Wisconsin Bestiary Submission Successful',
               buttonNames: ['OK']
             }).show();
+
             // XXX Success, close the form, clear the data
+            //
             self.win.close();
             var db = new Database();
             db.removeItem(self.data.filename);
             db = null;
+
           } else {
             Ti.UI.createAlertDialog({
               title: 'Error',
@@ -471,12 +486,17 @@ function SubmitView(mainView, data, blob) {
       parser.parseComplete(self.req.responseText);
     };
     self.req.onerror = function(resp){
+      self.submittingView.close();
       var alertDialog = Ti.UI.createAlertDialog({
         title: 'Failure',
-        message: 'There was an error submitting the form',
+        message: 'There was an unknown error submitting the form. ' +
+                 'Please try again. If the problem persists, contact support.',
         buttonNames: ['OK']
       });
       alertDialog.show();
+    };
+    self.req.onsendstream = function(e){
+      self.submittingView.updateProgress(Math.floor(e.progress*100));
     };
     self.req.open('POST', settings.submission_url);
     self.req.send(formData);
@@ -523,7 +543,8 @@ function SubmitView(mainView, data, blob) {
         self.formFields[field.name] = new Hidden(field, self.view);
       }
     }
-    // finally, add image selector
+    // finally, add buttons
+    self.view.add(self.discardBtn);
     self.view.add(self.submitBtn);
   };
 
@@ -532,6 +553,26 @@ function SubmitView(mainView, data, blob) {
     self.loadForm();
   };
 
+  self.discardBtn.addEventListener('click', function(e){
+    var cfm = Ti.UI.createAlertDialog({
+      title: 'Discard',
+      message: 'Are you certain you want to discard this data? ' +
+               'Discarding can not be undone.',
+      buttonNames: ['Yes, discard', 'No'],
+      cancel: 1
+    });
+
+    cfm.addEventListener('click', function(e){
+      if (e.index === e.source.cancel){
+        return;
+      }
+      self.win.close();
+      var db = new Database();
+      db.removeItem(self.data.filename);
+      db = null;
+    });
+    cfm.show();
+  });
 
   self.loadForm();
 
