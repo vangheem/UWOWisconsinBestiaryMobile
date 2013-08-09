@@ -81,7 +81,8 @@ function CaptureView(mainView) {
     Ti.Geolocation.getCurrentPosition(function(e){
       if (!e.success || e.error) {
         alert('Could not detect coordinates. Make sure GPS is on and ' +
-              'detecting you location and try again.');
+              'detecting you location and try again or manually input ' +
+              'your coordinates in the next form.');
         // XXX show a detect coordinates button
         self.detectCoordinatesBtn.setVisible(true);
         self.coordinatesLabel.setText('No coordinates detected');
@@ -109,7 +110,7 @@ function CaptureView(mainView) {
         if (e.code == Ti.Media.NO_CAMERA){
           a.setMessage('Phone does not have a camera');
         } else {
-          a.setMessage('Unexpected error: ' + e.code);
+          a.setMessage('Unexpected error using camera: ' + e.code);
         }
         // show alert
         a.show();

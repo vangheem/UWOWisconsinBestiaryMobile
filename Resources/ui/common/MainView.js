@@ -18,7 +18,7 @@ function MainView(application) {
         Ti.UI.createAlertDialog({
           title:'Location',
           message:'You have disallowed geolocation services. ' +
-                  'Photos will not have locations with them'
+                  'Photos will not have locations with them.'
         }).show();
       } else if (authorization == Titanium.Geolocation.AUTHORIZATION_RESTRICTED) {
         Ti.UI.createAlertDialog({
