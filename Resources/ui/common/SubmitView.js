@@ -92,6 +92,21 @@ var FIELDS = [
     label: 'Additional Information about image',
     required: false,
     type: TEXTAREA
+  },{
+    name: 'logitude',
+    label: 'Longitude',
+    required: false,
+    type: TEXT,
+  },{
+    name: 'latitude',
+    label: 'Latitude',
+    required: false,
+    type: TEXT
+  },{
+    name: 'altitude',
+    label: 'Altitude',
+    required: false,
+    type: TEXT
   }
 ];
 
@@ -328,6 +343,8 @@ function SubmitView(mainView, data, blob) {
   self.data = data;
   self.blob = blob;
   self.submittingView = null;
+  self.req = null;
+  self.formFields = {};
 
   self.win = Ti.UI.createWindow({
     title: 'Submit photo',
@@ -344,11 +361,9 @@ function SubmitView(mainView, data, blob) {
 
   self.open = function(){
     self.application.openNew(self.win);
+    self.loadForm();
   };
 
-
-  self.req = null;
-  self.formFields = {};
 
   self.submitBtn = Ti.UI.createButton({
     title: "Submit",
@@ -408,9 +423,6 @@ function SubmitView(mainView, data, blob) {
       }
     }
     formData['image-to-append_file'] = self.blob;
-    formData.altitude = self.data.altitude;
-    formData.logitude = self.data.longitude;
-    formData.latitude = self.data.latitude;
     var date = new Date(self.data.date);
     formData['date-photo-was-taken_year'] = date.getFullYear();
     var month = date.getMonth() + '';
@@ -523,9 +535,14 @@ function SubmitView(mainView, data, blob) {
       } 
     }));
 
-    self.view.add(Ti.UI.createImageView({
-      height: 150,
+    var imageViewView = Ti.UI.createView({
+      width: 200,
+      height: 200
+    });
+    self.view.add(imageViewView);
+    imageViewView.add(Ti.UI.createImageView({
       width: 'auto',
+      height: 200,
       canScale : true,
       image: self.blob
     }));
@@ -546,6 +563,14 @@ function SubmitView(mainView, data, blob) {
     // finally, add buttons
     self.view.add(self.discardBtn);
     self.view.add(self.submitBtn);
+
+    /* set some initial data */
+    if(self.data.longitude){
+      /* hide the input if already set */
+      self.formFields.logitude.widget.setValue(self.data.longitude);
+      self.formFields.altitude.widget.setValue(self.data.altitude);
+      self.formFields.latitude.widget.setValue(self.data.latitude);
+    }
   };
 
   self.reload = function(){
@@ -573,8 +598,6 @@ function SubmitView(mainView, data, blob) {
     });
     cfm.show();
   });
-
-  self.loadForm();
 
   return self;
 }

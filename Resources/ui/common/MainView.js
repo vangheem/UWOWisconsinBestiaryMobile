@@ -37,15 +37,15 @@ function MainView(application) {
   });
 
   self.captureBtn = Ti.UI.createButton({
-    top: '20%',
+    top: '15%',
     image: '/images/photo.png',
     title: 'Capture image',
     height: self.application.largeButtonHeight,
     width: self.application.buttonWidth
   });
   self.listingBtn = Ti.UI.createButton({
-    title: 'View Existing',
-    bottom: '20%',
+    title: 'View existing',
+    bottom: '15%',
     image: '/images/disk.png',
     height: self.application.largeButtonHeight,
     width: self.application.buttonWidth

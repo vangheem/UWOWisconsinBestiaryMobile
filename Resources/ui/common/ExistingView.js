@@ -57,7 +57,7 @@ function ExistingView(mainView) {
     }
     self.win.close();
     var view = new SubmitView(self.mainView, item, fi.read());
-    self.application.openNew(view.win);
+    view.open();
   });
 
 

@@ -1,6 +1,6 @@
 function ApplicationWindow() {
   var self = this;
-  self.largeButtonHeight = 200;
+  self.largeButtonHeight = 100;
   self.buttonWidth = 300;
   self.buttonHeight = 90;
 

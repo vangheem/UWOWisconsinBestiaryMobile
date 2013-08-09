@@ -144,7 +144,7 @@ function CaptureView(mainView) {
     self.win.close();
     var data = self.getData();
     var view = new SubmitView(self.mainView, data, self.blob);
-    self.application.openNew(view.win);
+    view.open();
   });
 
   self.detectCoordinatesBtn.addEventListener('click', function(e){
