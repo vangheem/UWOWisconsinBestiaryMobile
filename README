@@ -1,47 +1,16 @@
-Rework
-------
+Welcome
+=======
 
-Main page
-~~~~~~~~~
-
-- button to capture photo
-- button to review existing captures
+This is the Wisconsin Bestiary mobile application to be able to submit
+photographs with your mobile phone directly to
+http://www.uwosh.edu/wisconsinbestiary/submissions
 
 
-Photo Capture page
-~~~~~~~~~~~~~~~~~~
+Supported devices
+-----------------
 
-- take photo
-- show picture
-- show coordinates if captured
-- get coordinates--if failed
-- manually fill in coordinates
-- submit button(brings them to form to finish filling out)
-- save for later
+- Android
+- iOS
 
 
-Existing photos
-~~~~~~~~~~~~~~~
-
-- list of existing photos taken
-- delete button
-- submit button(brings them to form to finish filling out)
-
-
-Submit form
------------
-
-- fill in the rest of the information
-- submit to server
-
-
-----------------------------------
-Stuff our legal folk make us say:
-
-Appcelerator, Appcelerator Titanium and associated marks and logos are 
-trademarks of Appcelerator, Inc. 
-
-Titanium is Copyright (c) 2009-2012 by Appcelerator, Inc. All Rights Reserved.
-
-Titanium is licensed under the Apache Public License (Version 2). Please
-see the LICENSE file for the full license.
+No other detailed information right now, sorry.
