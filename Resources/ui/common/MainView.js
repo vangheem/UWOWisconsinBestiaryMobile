@@ -33,7 +33,8 @@ function MainView(application) {
 
   /* setup main window components */
   self.view = Ti.UI.createView({
-    backgroundColor:'white'
+    backgroundColor:'white',
+    zIndex: 1
   });
 
   self.captureBtn = Ti.UI.createButton({
@@ -70,6 +71,39 @@ function MainView(application) {
     var view = new ExistingView(self);
     self.application.openNew(view.win);
   });
+
+  self.addHeader = function(win){
+    var headerView = Ti.UI.createView({
+      width: '100%',
+      height: 64,
+      top: 0,
+      left: 0,
+      backgroundColor: '#DDDDDD',
+      zIndex: 2
+    });
+    headerView.add(Ti.UI.createImageView({
+        width: 'auto',
+        height: 'auto',
+        top: 0,
+        left: 0,
+        backgroundColor: '#DDDDDD',
+        image: '/images/smallicon.png'
+    }));
+    headerView.add(Ti.UI.createLabel({
+      width: 300,
+      text: 'Wisconsin Bestiary',
+      top: 10,
+      left: 70,
+      color: 'black',
+      font: {
+        fontSize: 32
+      }
+    }));
+
+    win.add(headerView);
+  };
+  self.addHeader(self.application.win);
+
 
   return self;
 }

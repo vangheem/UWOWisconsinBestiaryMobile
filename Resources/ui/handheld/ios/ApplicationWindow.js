@@ -3,12 +3,15 @@ function ApplicationWindow() {
   self.largeButtonHeight = 90;
   self.buttonWidth = 300;
   self.buttonHeight = 40;
+  self.labelFont = {
+    fontSize: 18,
+  };
+  self.labelColor = 'black';
 
   //create object instance
   self.mainWin = Ti.UI.createWindow({
     backgroundColor:'#ffffff',
-    orientationModes: [Ti.UI.PORTRAIT],
-    navBarHidden:false
+    orientationModes: [Ti.UI.PORTRAIT]
   });
 
   //create master view container

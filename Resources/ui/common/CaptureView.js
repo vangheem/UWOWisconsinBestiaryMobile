@@ -18,7 +18,9 @@ function CaptureView(mainView) {
     navBarHidden:false
   });
   self.view = Ti.UI.createView({
-    backgroundColor:'white'
+    backgroundColor:'white',
+    zIndex: 1,
+    top: 64
   });
 
   self.captureBtn = Ti.UI.createButton({
@@ -37,16 +39,16 @@ function CaptureView(mainView) {
     width: self.application.buttonWidth
   });
   self.imageView = Ti.UI.createImageView({
-    top: '25%',
+    top: '28%',
     visible: false,
-    height: 250,
+    height: 200,
     width: 'auto',
     canScale : true
   });
 
 
   self.coordinatesLabel = Ti.UI.createLabel({
-    bottom: '32%',
+    bottom: '30%',
     text: ''
   });
 
@@ -75,6 +77,7 @@ function CaptureView(mainView) {
   self.view.add(self.imageView);
   self.view.add(self.saveBtn);
   self.view.add(self.submitBtn);
+  self.mainView.addHeader(self.win);
 
 
   self.detectCoordinates = function(){

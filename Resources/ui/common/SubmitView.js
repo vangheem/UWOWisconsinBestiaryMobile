@@ -11,8 +11,12 @@ var ui = {};
 ui.label = function(label){
   return Ti.UI.createLabel({
     text: label,
-    textAlign: Ti.UI.TEXT_ALIGNMENT_CENTER,
-    font: { fontSize:25 }
+    textAlign: Ti.UI.TEXT_ALIGNMENT_LEFT,
+    width: '95%',
+    color: 'black',
+    font: {
+      fontSize: 28
+    }
   });
 };
 
@@ -89,7 +93,7 @@ var FIELDS = [
     type: TEXT
   },{
     name: 'specific-text-you-would-like-used-to-acknowledge-photograph-interesting-anecdote-submission',
-    label: 'Additional Information about image',
+    label: 'Additional Information about the submission',
     required: false,
     type: TEXTAREA
   },{
@@ -219,7 +223,7 @@ function TextArea(field, container){
     top: 10,
     left: 5,
     right: 5,
-    height: 70
+    height: 120
   });
   self.container.add(self.widget);
 
@@ -354,10 +358,14 @@ function SubmitView(mainView, data, blob) {
   self.view = Ti.UI.createScrollView({
     backgroundColor:'white',
     contentHeight: 'auto',
-    layout: 'vertical'
+    layout: 'vertical',
+    top: 64
   });
 
+
   self.win.add(self.view);
+  self.mainView.addHeader(self.win);
+
 
   self.open = function(){
     self.application.openNew(self.win);
@@ -479,9 +487,14 @@ function SubmitView(mainView, data, blob) {
 
             // XXX Success, close the form, clear the data
             //
-            self.win.close();
             var db = new Database();
             db.removeItem(self.data.filename);
+            db.setUserData(
+              self.formFields['first-name'].widget.getValue(),
+              self.formFields['last-name'].widget.getValue(),
+              self.formFields.replyto.widget.getValue()
+            );
+            self.win.close();
             db = null;
 
           } else {
@@ -518,14 +531,10 @@ function SubmitView(mainView, data, blob) {
 
     self.view.add(Ti.UI.createLabel({
       text: 'Please fill out the form to finish the submission.',
-      borderColor: '#000000',
-      borderRadius: 5,
       width: 'auto',
       height: 'auto',
-      backgroundPaddingLeft: 10,
-      backgroundPaddingRight: 10,
-      backgroundPaddingTop: 10,
-      backgroundPaddingBottom: 10,
+      color: 'black',
+      textAlign: Ti.UI.TEXT_ALIGNMENT_CENTER,
       top: 10,
       right: 10,
       left: 10,
@@ -570,6 +579,14 @@ function SubmitView(mainView, data, blob) {
       self.formFields.logitude.widget.setValue(self.data.longitude);
       self.formFields.altitude.widget.setValue(self.data.altitude);
       self.formFields.latitude.widget.setValue(self.data.latitude);
+    }
+    var db = new Database();
+    var userData = db.getUserData();
+    if(userData){
+      self.formFields['first-name'].widget.setValue(userData.first);
+      self.formFields['last-name'].widget.setValue(userData.last);
+      self.formFields.replyto.widget.setValue(userData.email);
+      db = null;
     }
   };
 

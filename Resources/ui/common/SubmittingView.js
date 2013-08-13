@@ -8,7 +8,9 @@ function SubmittingView() {
     orientationModes: [Ti.UI.PORTRAIT]
   });
   self.view = Ti.UI.createView({
-    backgroundColor:'white'
+    backgroundColor:'white',
+    top: 64,
+    zindex: 1
   });
 
   self.ind = Titanium.UI.createProgressBar({
@@ -25,8 +27,11 @@ function SubmittingView() {
     }
   });
 
+
   self.view.add(self.ind);
   self.win.add(self.view);
+  self.mainView.addHeader(self.win);
+
 
   self.open = function(){
     self.win.open();

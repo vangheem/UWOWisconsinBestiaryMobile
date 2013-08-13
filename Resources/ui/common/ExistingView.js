@@ -13,7 +13,9 @@ function ExistingView(mainView) {
     navBarHidden:false
   });
   self.view = Ti.UI.createView({
-    backgroundColor:'white'
+    backgroundColor:'white',
+    zindex: 1,
+    top: 64
   });
 
   //some dummy data for our table view
@@ -61,6 +63,7 @@ function ExistingView(mainView) {
   });
 
 
+  self.mainView.addHeader(self.win);
   self.win.add(self.view);
   self.view.add(self.table);
 

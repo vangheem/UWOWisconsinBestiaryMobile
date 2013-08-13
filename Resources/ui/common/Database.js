@@ -1,6 +1,7 @@
 function Database(){
   var self = this;
   self._dataFileName = 'bestiary.json';
+  self._userDataFileName = 'bestiaryuser.json';
 
   self.getDataFile = function(){
     return Ti.Filesystem.getFile(Ti.Filesystem.applicationDataDirectory,
@@ -64,6 +65,36 @@ function Database(){
     fi.write(blob);
     allData.push(data);
     self.set(allData);
+  };
+
+  self.getUserDataFile = function(){
+    return Ti.Filesystem.getFile(Ti.Filesystem.applicationDataDirectory,
+                                 self._userDataFileName);
+  };
+
+  self.getUserData = function(){
+    var df = self.getUserDataFile();
+    if(!df.exists()){
+      return null;
+    }
+    try{
+      var blob = df.read();
+      var result = JSON.parse(blob.text);
+      blob = null;
+      return result;
+    }catch(e){
+      return null;
+    }
+  };
+
+  self.setUserData = function(first, last, email){
+    var data = {
+      first: first,
+      last: last,
+      email: email
+    };
+    var df = self.getUserDataFile();
+    df.write(JSON.stringify(data));
   };
 
   return self;

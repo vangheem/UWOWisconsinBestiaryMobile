@@ -3,12 +3,15 @@ function ApplicationWindow() {
   self.largeButtonHeight = 100;
   self.buttonWidth = 300;
   self.buttonHeight = 90;
+  self.labelFont = {
+    fontSize: 18,
+  };
+  self.labelColor = 'black';
 
   //create object instance
   self.win = Ti.UI.createWindow({
     title:'Wisconsin Bestiary',
     exitOnClose:true,
-    navBarHidden:false,
     backgroundColor:'#ffffff',
     orientationModes: [Ti.UI.PORTRAIT]
   });
