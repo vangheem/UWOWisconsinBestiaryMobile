@@ -38,7 +38,7 @@ function MainView(application) {
   });
 
   self.captureBtn = Ti.UI.createButton({
-    top: '15%',
+    top: '18%',
     image: '/images/photo.png',
     title: 'Capture image',
     height: self.application.largeButtonHeight,
@@ -46,7 +46,7 @@ function MainView(application) {
   });
   self.listingBtn = Ti.UI.createButton({
     title: 'View existing',
-    bottom: '15%',
+    bottom: '18%',
     image: '/images/disk.png',
     height: self.application.largeButtonHeight,
     width: self.application.buttonWidth
@@ -92,12 +92,10 @@ function MainView(application) {
     headerView.add(Ti.UI.createLabel({
       width: 300,
       text: 'Wisconsin Bestiary',
-      top: 10,
+      top: self.application.headerLabelTop,
       left: 70,
       color: 'black',
-      font: {
-        fontSize: 32
-      }
+      font: self.application.headerLabelFont
     }));
 
     win.add(headerView);

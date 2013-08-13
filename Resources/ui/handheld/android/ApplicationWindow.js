@@ -3,10 +3,10 @@ function ApplicationWindow() {
   self.largeButtonHeight = 100;
   self.buttonWidth = 300;
   self.buttonHeight = 90;
-  self.labelFont = {
-    fontSize: 18,
+  self.headerLabelFont = {
+    fontSize: 32
   };
-  self.labelColor = 'black';
+  self.headerLabelTop = 15;
 
   //create object instance
   self.win = Ti.UI.createWindow({

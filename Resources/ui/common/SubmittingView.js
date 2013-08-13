@@ -6,7 +6,8 @@ function SubmittingView(mainView) {
 
   self.win = Ti.UI.createWindow({
     title: 'Submitting data...',
-    orientationModes: [Ti.UI.PORTRAIT]
+    orientationModes: [Ti.UI.PORTRAIT],
+    navBarHidden:false
   });
   self.view = Ti.UI.createView({
     backgroundColor:'white',

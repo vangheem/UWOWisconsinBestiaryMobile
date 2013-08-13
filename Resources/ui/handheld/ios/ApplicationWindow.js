@@ -3,34 +3,36 @@ function ApplicationWindow() {
   self.largeButtonHeight = 90;
   self.buttonWidth = 300;
   self.buttonHeight = 40;
-  self.labelFont = {
-    fontSize: 18,
+  self.headerLabelFont = {
+    fontSize: 24
   };
-  self.labelColor = 'black';
+  self.headerLabelTop = 20;
+
 
   //create object instance
-  self.mainWin = Ti.UI.createWindow({
+  self.containerWin = Ti.UI.createWindow({
     backgroundColor:'#ffffff',
-    orientationModes: [Ti.UI.PORTRAIT]
+    orientationModes: [Ti.UI.PORTRAIT],
+    navBarHidden:false
   });
 
   //create master view container
-  self.masterContainer = Ti.UI.createWindow({
+  self.win = Ti.UI.createWindow({
     title: 'Wisconsin Bestiary'
   });
 
   self.add = function(container){
-    self.masterContainer.add(container);
+    self.win.add(container);
   };
 
   //create iOS specific NavGroup UI
   self.navGroup = Ti.UI.iPhone.createNavigationGroup({
-    window: self.masterContainer
+    window: self.win
   });
-  self.mainWin.add(self.navGroup);
+  self.containerWin.add(self.navGroup);
 
   self.open = function(){
-    self.mainWin.open();
+    self.containerWin.open();
   };
 
   self.openNew = function(win){
