@@ -21,26 +21,52 @@ function ExistingView(mainView) {
   //some dummy data for our table view
   var tableData = [];
   var db = Database();
-  var data = db.get();
-  for(var i=0; i<data.length; i++){
-    var item = data[i];
+  self.data = db.get();
+  for(var i=0; i<self.data.length; i++){
+    var item = self.data[i];
     var date = new Date(item.date);
-    tableData.push({
-      title: 'Date: ' + date.getDate() + "/" + date.getMonth() + "/" +
-             date.getFullYear() + " Time: " + date.getHours() + ":" +
-             date.getMinutes(),
-      filename: item.filename
+    var text = 'Created on ' + date.getDate() + "/" + date.getMonth() + "/" +
+               date.getFullYear();
+    var row = Ti.UI.createTableViewRow();
+    var label = Ti.UI.createLabel({
+      text: text,
+      textAlign: Ti.UI.TEXT_ALIGNMENT_LEFT,
+      width: '100%',
+      color: 'black',
+      font: {
+        fontSize: 18
+      },
+      top: 18,
+      left: 75
     });
+
+    var imageViewView = Ti.UI.createView({
+      width: 64,
+      height: 64,
+      top: 0,
+      left: 5
+    });
+    var image = db.getFile(item.filename);
+    imageViewView.add(Ti.UI.createImageView({
+      width: 'auto',
+      height: 64,
+      canScale : true,
+      image: image
+    }));
+    row.add(imageViewView);
+    row.add(label);
+    tableData.push(row);
   }
   self.table = Ti.UI.createTableView({
-    data:tableData
+    data:tableData,
   });
+  db = null;
+
 
   //add behavior
   self.table.addEventListener('click', function(e) {
-    var db = Database();
-    var item = db.getItem(e.rowData.filename);
-    if(item === null){
+    var item = self.data[e.index];
+    if(item === null || item === undefined){
       Ti.UI.createAlertDialog({
         title: 'Missing',
         message: 'Unexpected error, could not find data for existing item',
@@ -48,6 +74,7 @@ function ExistingView(mainView) {
       }).show();
       return;
     }
+    var db = Database();
     var fi = db.getFile(item.filename);
     if(!fi.exists()){
       Ti.UI.createAlertDialog({
@@ -57,9 +84,18 @@ function ExistingView(mainView) {
       }).show();
       return;
     }
+    self.view.remove(self.table);
+    self.view.add(Ti.UI.createLabel({
+      text: 'Loading...',
+      color: 'black',
+      font: {
+        fontSize: 24
+      }
+    }));
     self.win.close();
     var view = new SubmitView(self.mainView, item, fi.read());
     view.open();
+    db = null;
   });
 
 

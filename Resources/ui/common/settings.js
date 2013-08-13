@@ -1,6 +1,6 @@
 exports = {};
 
-exports.submission_url = 'http://www.uwosh.edu/wisconsinbestiary/copy_of_submissions/view';
+exports.submission_url = 'http://www.uwosh.edu/wisconsinbestiary/submissions';
 exports.form_selector = 'div.pfg-form form';
 exports.form_data = {
   'agreement:list': 'I agree',

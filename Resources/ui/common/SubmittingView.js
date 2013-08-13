@@ -1,7 +1,8 @@
 
 
-function SubmittingView() {
+function SubmittingView(mainView) {
   var self = this;
+  self.mainView = mainView;
 
   self.win = Ti.UI.createWindow({
     title: 'Submitting data...',

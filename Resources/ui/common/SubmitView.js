@@ -444,7 +444,7 @@ function SubmitView(mainView, data, blob) {
     }
     formData['date-photo-was-taken_day'] = day;
 
-    self.submittingView = new SubmittingView();
+    self.submittingView = new SubmittingView(self.mainView);
     self.submittingView.open();
 
     self.req = Ti.Network.createHTTPClient();
