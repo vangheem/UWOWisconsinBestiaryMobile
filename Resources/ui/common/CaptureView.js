@@ -23,21 +23,17 @@ function CaptureView(mainView) {
     top: 64
   });
 
-  self.captureBtn = Ti.UI.createButton({
+  self.captureBtn = Ti.UI.createButton(self.mainView.buttonOptions({
     title: 'Take Picture',
     top: '1%',
-    image: '/images/photo.png',
-    height: self.application.buttonHeight,
-    width: self.application.buttonWidth
-  });
-  self.detectCoordinatesBtn = Ti.UI.createButton({
+    image: '/images/photo.png'
+  }));
+  self.detectCoordinatesBtn = Ti.UI.createButton(self.mainView.buttonOptions({
     title: 'Get current coordinates',
     top: '14%',
     visible: false,
-    image: '/images/global.png',
-    height: self.application.buttonHeight,
-    width: self.application.buttonWidth
-  });
+    image: '/images/global.png'
+  }));
   self.imageView = Ti.UI.createImageView({
     top: '28%',
     visible: false,
@@ -52,22 +48,18 @@ function CaptureView(mainView) {
     text: ''
   });
 
-  self.saveBtn = Ti.UI.createButton({
+  self.saveBtn = Ti.UI.createButton(self.mainView.buttonOptions({
     title: 'Save for later',
     bottom: '14%',
     image: '/images/disk.png',
-    height: self.application.buttonHeight,
-    width: self.application.buttonWidth,
     enabled: false
-  });
-  self.submitBtn = Ti.UI.createButton({
+  }));
+  self.submitBtn = Ti.UI.createButton(self.mainView.buttonOptions({
     title: 'Submit',
     bottom: '1%',
-    height: self.application.buttonHeight,
-    width: self.application.buttonWidth,
     image: '/images/add.png',
     enabled: false
-  });
+  }));
 
 
   self.win.add(self.view);

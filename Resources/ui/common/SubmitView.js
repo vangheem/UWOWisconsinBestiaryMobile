@@ -373,18 +373,15 @@ function SubmitView(mainView, data, blob) {
   };
 
 
-  self.submitBtn = Ti.UI.createButton({
+  self.submitBtn = Ti.UI.createButton(self.mainView.buttonOptions({
     title: "Submit",
-    height: self.application.buttonHeight,
-    width: self.application.buttonWidth,
     image: '/images/check.png'
-  });
-  self.discardBtn = Ti.UI.createButton({
+  }));
+  self.discardBtn = Ti.UI.createButton(self.mainView.buttonOptions({
     title: "Discard",
     height: self.application.buttonHeight - 20,
-    width: self.application.buttonWidth,
     image: '/images/delete.png'
-  });
+  }));
 
   self.submitBtn.addEventListener('click', function(e){
     self.submitForm();

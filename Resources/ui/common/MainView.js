@@ -37,20 +37,34 @@ function MainView(application) {
     zIndex: 1
   });
 
-  self.captureBtn = Ti.UI.createButton({
+
+  self.buttonOptions = function(opts){
+    if(!opts.height){
+      opts.height = self.application.buttonHeight;
+    }
+    if(!opts.width){
+      opts.width = self.application.buttonWidth;
+    }
+    if(!self.application.buttonImages && opts.image){
+      delete opts.image;
+    }
+    return opts;
+  };
+
+  self.captureBtn = Ti.UI.createButton(self.buttonOptions({
     top: '18%',
     image: '/images/photo.png',
     title: 'Capture image',
     height: self.application.largeButtonHeight,
     width: self.application.buttonWidth
-  });
-  self.listingBtn = Ti.UI.createButton({
+  }));
+  self.listingBtn = Ti.UI.createButton(self.buttonOptions({
     title: 'View existing',
     bottom: '18%',
     image: '/images/disk.png',
     height: self.application.largeButtonHeight,
     width: self.application.buttonWidth
-  });
+  }));
 
   self.view.add(self.captureBtn);
   self.view.add(self.listingBtn);

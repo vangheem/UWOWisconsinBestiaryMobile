@@ -7,6 +7,7 @@ function ApplicationWindow() {
     fontSize: 32
   };
   self.headerLabelTop = 15;
+  self.buttonImages = true;
 
 
   //create object instance
