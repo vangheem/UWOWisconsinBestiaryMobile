@@ -8,6 +8,8 @@ function ApplicationWindow() {
   };
   self.headerLabelTop = 15;
   self.buttonImages = true;
+  self.previewImageHeight = 200;
+  self.previewImageTop = '28%';
 
   //create object instance
   self.win = Ti.UI.createWindow({
@@ -29,6 +31,9 @@ function ApplicationWindow() {
     win.open();
   };
 
+  self.close = function(win){
+    win.close();
+  };
   var MainView = require('ui/common/MainView');
   self.mainView = new MainView(self);
 

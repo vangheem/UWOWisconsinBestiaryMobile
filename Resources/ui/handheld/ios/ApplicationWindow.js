@@ -1,13 +1,15 @@
 function ApplicationWindow() {
   var self = this;
-  self.largeButtonHeight = 90;
+  self.largeButtonHeight = 100;
   self.buttonWidth = 300;
-  self.buttonHeight = 40;
+  self.buttonHeight = 50;
   self.headerLabelFont = {
     fontSize: 24
   };
   self.headerLabelTop = 20;
   self.buttonImages = false;
+  self.previewImageHeight = 100;
+  self.previewImageTop = '22%';
 
 
   //create object instance
@@ -38,6 +40,10 @@ function ApplicationWindow() {
 
   self.openNew = function(win){
     self.navGroup.open(win);
+  };
+
+  self.close = function(win){
+    self.navGroup.close(win);
   };
 
   var MainView = require('ui/common/MainView');

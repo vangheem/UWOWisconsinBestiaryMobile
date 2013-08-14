@@ -85,17 +85,19 @@ function ExistingView(mainView) {
       return;
     }
     self.view.remove(self.table);
-    self.view.add(Ti.UI.createLabel({
+    var loading = Ti.UI.createLabel({
       text: 'Loading...',
       color: 'black',
       font: {
         fontSize: 24
       }
-    }));
-    self.win.close();
+    });
+    self.view.add(loading);
     var view = new SubmitView(self.mainView, item, fi.read());
+    // XXX self.win.close();
     view.open();
-    db = null;
+    self.application.close(self.win);
+
   });
 
 

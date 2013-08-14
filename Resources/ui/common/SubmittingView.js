@@ -3,6 +3,7 @@
 function SubmittingView(mainView) {
   var self = this;
   self.mainView = mainView;
+  self.application = self.mainView.application;
 
   self.win = Ti.UI.createWindow({
     title: 'Submitting data...',
@@ -36,11 +37,11 @@ function SubmittingView(mainView) {
 
 
   self.open = function(){
-    self.win.open();
+    self.application.openNew(self.win);
   };
 
   self.close = function(){
-    self.win.close();
+    self.application.close(self.win);
   };
 
   self.updateProgress = function(amount){

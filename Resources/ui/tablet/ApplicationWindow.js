@@ -8,6 +8,8 @@ function ApplicationWindow() {
   };
   self.headerLabelTop = 15;
   self.buttonImages = true;
+  self.previewImageHeight = 300;
+  self.previewImageTop = '28%';
 
 
   //create object instance
@@ -29,6 +31,10 @@ function ApplicationWindow() {
 
   self.openNew = function(win){
     win.open();
+  };
+
+  self.close = function(win){
+    win.close();
   };
 
   var MainView = require('ui/common/MainView');

@@ -15,7 +15,7 @@ ui.label = function(label){
     width: '95%',
     color: 'black',
     font: {
-      fontSize: 28
+      fontSize: 24
     }
   });
 };
@@ -491,8 +491,8 @@ function SubmitView(mainView, data, blob) {
               self.formFields['last-name'].widget.getValue(),
               self.formFields.replyto.widget.getValue()
             );
-            self.win.close();
             db = null;
+            self.application.close(self.win);
 
           } else {
             Ti.UI.createAlertDialog({
@@ -537,7 +537,7 @@ function SubmitView(mainView, data, blob) {
       left: 10,
       bottom: 10,
       font: {
-        fontSize: 30
+        fontSize: 28
       } 
     }));
 
@@ -605,10 +605,10 @@ function SubmitView(mainView, data, blob) {
       if (e.index === e.source.cancel){
         return;
       }
-      self.win.close();
       var db = new Database();
       db.removeItem(self.data.filename);
       db = null;
+      self.application.close(self.win);
     });
     cfm.show();
   });

@@ -35,9 +35,9 @@ function CaptureView(mainView) {
     image: '/images/global.png'
   }));
   self.imageView = Ti.UI.createImageView({
-    top: '28%',
+    top: self.application.previewImageTop,
     visible: false,
-    height: 200,
+    height: self.application.previewImageHeight,
     width: 'auto',
     canScale : true
   });
@@ -50,7 +50,7 @@ function CaptureView(mainView) {
 
   self.saveBtn = Ti.UI.createButton(self.mainView.buttonOptions({
     title: 'Save for later',
-    bottom: '14%',
+    bottom: '15%',
     image: '/images/disk.png',
     enabled: false
   }));
@@ -133,11 +133,11 @@ function CaptureView(mainView) {
     var db = new Database();
     var data = self.getData();
     db.add(data, self.blob);
-    self.win.close();
+    self.application.close(self.win);
   });
 
   self.submitBtn.addEventListener('click', function(e){
-    self.win.close();
+    // XXX self.win.close();
     var data = self.getData();
     var view = new SubmitView(self.mainView, data, self.blob);
     view.open();
