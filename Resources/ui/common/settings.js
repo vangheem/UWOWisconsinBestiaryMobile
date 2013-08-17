@@ -15,7 +15,9 @@ exports.form_data = {
   'date-photo-was-taken_hour': '00',
   'date-photo-was-taken_minute': '00',
   'date-photo-was-taken_ampm': '',
-  'form_submit': 'Submit'
+  'form_submit': 'Submit',
+  'app-version': Ti.App.version,
+  'device': Ti.Platform.osname + ': ' + Ti.Platform.model
 };
 
 settings = exports;
