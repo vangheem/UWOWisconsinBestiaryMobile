@@ -65,6 +65,7 @@ function Database(){
     fi.write(blob);
     allData.push(data);
     self.set(allData);
+    return data.filename;
   };
 
   self.getUserDataFile = function(){

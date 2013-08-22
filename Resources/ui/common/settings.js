@@ -17,7 +17,7 @@ exports.form_data = {
   'date-photo-was-taken_ampm': '',
   'form_submit': 'Submit',
   'app-version': Ti.App.version,
-  'device': Ti.Platform.osname + ': ' + Ti.Platform.model
+  'device': Ti.Platform.osname + ' ' + Ti.Platform.version + ': ' + Ti.Platform.model
 };
 
 settings = exports;

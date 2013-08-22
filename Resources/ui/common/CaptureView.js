@@ -158,9 +158,13 @@ function CaptureView(mainView) {
   });
 
   self.submitBtn.addEventListener('click', function(e){
-    // XXX self.win.close();
+    // store it and then retrieve it for submission
+    var db = new Database();
     var data = self.getData();
-    var view = new SubmitView(self.mainView, data, self.blob);
+    var filename = db.add(data, self.blob);
+    var fi = db.getFile(filename);
+    data = db.getItem(filename);
+    var view = new SubmitView(self.mainView, data, fi);
     view.open();
   });
 
