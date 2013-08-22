@@ -375,12 +375,13 @@ function SubmitView(mainView, data, blob) {
 
   self.submitBtn = Ti.UI.createButton(self.mainView.buttonOptions({
     title: "Submit",
-    image: '/images/check.png'
+    image: '/images/check.png',
+    height: 130
   }));
   self.discardBtn = Ti.UI.createButton(self.mainView.buttonOptions({
     title: "Discard",
-    height: self.application.buttonHeight - 20,
-    image: '/images/delete.png'
+    image: '/images/delete.png',
+    height: 100
   }));
 
   self.submitBtn.addEventListener('click', function(e){

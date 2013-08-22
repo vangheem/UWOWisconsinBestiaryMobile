@@ -1,15 +1,24 @@
 function ApplicationWindow() {
   var self = this;
-  self.largeButtonHeight = 100;
+  self.largeButtonHeight = '21%';
   self.buttonWidth = 300;
-  self.buttonHeight = 90;
-  self.headerLabelFont = {
-    fontSize: 32
-  };
   self.headerLabelTop = 15;
-  self.buttonImages = true;
-  self.previewImageHeight = 200;
-  self.previewImageTop = '28%';
+  if(Ti.Platform.displayCaps.platformHeight > 500){
+    self.buttonImages = true;
+    self.headerLabelFont = {
+      fontSize: 32
+    };
+    self.previewImageTop = '28%';
+    self.buttonHeight = '14%';
+  } else {
+    self.buttonImages = false;
+    self.headerLabelFont = {
+      fontSize: 28
+    };
+    self.previewImageTop = '25%';
+    self.buttonHeight = '12%';
+  }
+  self.previewImageHeight = '25%';
 
   //create object instance
   self.win = Ti.UI.createWindow({

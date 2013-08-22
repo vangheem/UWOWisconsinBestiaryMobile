@@ -1,8 +1,8 @@
 function ApplicationWindow() {
   var self = this;
-  self.largeButtonHeight = 100;
+  self.largeButtonHeight = '15%';
   self.buttonWidth = 300;
-  self.buttonHeight = 50;
+  self.buttonHeight = '10%';
   self.headerLabelFont = {
     fontSize: 24
   };

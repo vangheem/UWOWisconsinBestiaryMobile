@@ -96,8 +96,29 @@ function CaptureView(mainView) {
   };
 
   self.captureBtn.addEventListener('click', function(e){
+    var button = Titanium.UI.createButton({
+      color : '#fff',
+      bottom : '3%',
+      width : '80%',
+      height : '15%',
+      font : {
+        fontSize : 20,
+        fontWeight : 'bold',
+        fontFamily : 'Helvetica Neue'
+      },
+      title : 'Take Picture'
+    });
+
+    var overlay = Titanium.UI.createView();
+    overlay.add(button);
+
+    button.addEventListener('click', function() {
+      Ti.Media.takePicture();
+    });
+
     Ti.Media.showCamera({
       mediaTypes:[Ti.Media.MEDIA_TYPE_PHOTO],
+      overlay: overlay,
       error: function(e){
         // create alert
         var a = Ti.UI.createAlertDialog({title:'Camera'});
