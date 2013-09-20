@@ -37,19 +37,19 @@ function ExistingView(mainView) {
         fontSize: 18
       },
       top: 18,
-      left: 75
+      left: 160
     });
 
     var imageViewView = Ti.UI.createView({
-      width: 64,
-      height: 64,
+      width: 150,
+      height: 150,
       top: 0,
       left: 5
     });
     var image = db.getFile(item.filename);
     imageViewView.add(Ti.UI.createImageView({
       width: 'auto',
-      height: 64,
+      height: 150,
       canScale : true,
       image: image
     }));
