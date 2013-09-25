@@ -4,11 +4,7 @@ function Database(){
   self._userDataFileName = 'bestiaryuser.json';
 
   self.getBaseDirectory = function(){
-    if(self.ios){
-      return Ti.Filesystem.applicationSupportDirectory;
-    }else{
-      return Ti.Filesystem.applicationDataDirectory;
-    }
+    return Ti.Filesystem.applicationDataDirectory;
   };
 
   self.getDataFile = function(){
