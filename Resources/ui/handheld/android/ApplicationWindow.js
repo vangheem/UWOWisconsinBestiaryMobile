@@ -1,5 +1,7 @@
 function ApplicationWindow() {
   var self = this;
+  self.ios = false;
+  self.android = true;
   self.largeButtonHeight = '21%';
   self.buttonWidth = 300;
   self.headerLabelTop = 15;

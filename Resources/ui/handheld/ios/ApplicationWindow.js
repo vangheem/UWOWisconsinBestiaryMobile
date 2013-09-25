@@ -1,5 +1,7 @@
 function ApplicationWindow() {
   var self = this;
+  self.ios = true;
+  self.android = false;
   self.largeButtonHeight = '15%';
   self.buttonWidth = 300;
   self.buttonHeight = '10%';

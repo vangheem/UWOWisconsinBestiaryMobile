@@ -98,8 +98,8 @@ function CaptureView(mainView) {
   self.captureBtn.addEventListener('click', function(e){
     var button = Titanium.UI.createButton({
       color : '#fff',
-      bottom : '3%',
-      width : '80%',
+      bottom : '10%',
+      width : '50%',
       height : '15%',
       font : {
         fontSize : 20,
@@ -116,9 +116,8 @@ function CaptureView(mainView) {
       Ti.Media.takePicture();
     });
 
-    Ti.Media.showCamera({
+    var cameraOptions = {
       mediaTypes:[Ti.Media.MEDIA_TYPE_PHOTO],
-      overlay: overlay,
       error: function(e){
         // create alert
         var a = Ti.UI.createAlertDialog({title:'Camera'});
@@ -147,7 +146,20 @@ function CaptureView(mainView) {
           });
         }
       }
-    });
+    };
+    if(self.application.ios){
+      cameraOptions.autohide = true;
+      cameraOptions.showControls = true;
+      cameraOptions.allowEditing = true;
+      try{
+        Ti.Media.switchCamera(Ti.Media.CAMERA_REAR);
+      }catch(error){
+        //
+      }
+    }else{
+      cameraOptions.overlay = overlay;
+    }
+    Ti.Media.showCamera(cameraOptions);
   });
 
   self.saveBtn.addEventListener('click', function(e){

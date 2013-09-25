@@ -1,5 +1,7 @@
 function ApplicationWindow() {
   var self = this;
+  self.ios = Ti.Platform.osname === 'ipad' ? true : false;
+  self.andoird = Ti.Platform.osname !== 'ipad' ? false : true;
   self.largeButtonHeight = 300;
   self.buttonWidth = 500;
   self.buttonHeight = 140;

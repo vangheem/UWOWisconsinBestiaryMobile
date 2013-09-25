@@ -25,7 +25,7 @@ function ExistingView(mainView) {
   for(var i=0; i<self.data.length; i++){
     var item = self.data[i];
     var date = new Date(item.date);
-    var text = 'Created on ' + date.getDate() + "/" + date.getMonth() + "/" +
+    var text = date.getDate() + "/" + date.getMonth() + "/" +
                date.getFullYear();
     var row = Ti.UI.createTableViewRow();
     var label = Ti.UI.createLabel({
@@ -37,19 +37,19 @@ function ExistingView(mainView) {
         fontSize: 18
       },
       top: 18,
-      left: 160
+      left: 130
     });
 
     var imageViewView = Ti.UI.createView({
-      width: 150,
-      height: 150,
+      width: 120,
+      height: 120,
       top: 0,
       left: 5
     });
     var image = db.getFile(item.filename);
     imageViewView.add(Ti.UI.createImageView({
       width: 'auto',
-      height: 150,
+      height: 120,
       canScale : true,
       image: image
     }));

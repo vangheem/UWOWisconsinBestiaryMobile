@@ -82,7 +82,7 @@ var FIELDS = [
     name: 'animal',
     label: 'Group/Phyla',
     type: SELECT,
-    options: ["ameba", "amphibians", "bird", "centipedes", "crustacean",
+    options: ["ameba", "amphibians", "bird", "centipedes", "ciliates", "crustacean",
               "fish", "flagellate", "hydrai", "insect", "leech", "mammal",
               "millpedes", "mussels", "reptile", "rotifer", "slug/snails",
               "sponge", "ticks/spiders", "unsure"]

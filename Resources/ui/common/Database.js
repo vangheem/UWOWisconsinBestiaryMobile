@@ -3,9 +3,16 @@ function Database(){
   self._dataFileName = 'bestiary.json';
   self._userDataFileName = 'bestiaryuser.json';
 
+  self.getBaseDirectory = function(){
+    if(self.ios){
+      return Ti.Filesystem.applicationSupportDirectory;
+    }else{
+      return Ti.Filesystem.applicationDataDirectory;
+    }
+  };
+
   self.getDataFile = function(){
-    return Ti.Filesystem.getFile(Ti.Filesystem.applicationDataDirectory,
-                                 self._dataFileName);
+    return Ti.Filesystem.getFile(self.getBaseDirectory(), self._dataFileName);
   };
 
   self.get = function(){
@@ -53,8 +60,7 @@ function Database(){
   };
 
   self.getFile = function(filename){
-    return Ti.Filesystem.getFile(Ti.Filesystem.applicationDataDirectory,
-                                 filename);
+    return Ti.Filesystem.getFile(self.getBaseDirectory(), filename);
   };
 
   self.add = function(data, blob){
@@ -69,7 +75,7 @@ function Database(){
   };
 
   self.getUserDataFile = function(){
-    return Ti.Filesystem.getFile(Ti.Filesystem.applicationDataDirectory,
+    return Ti.Filesystem.getFile(self.getBaseDirectory(),
                                  self._userDataFileName);
   };
 
