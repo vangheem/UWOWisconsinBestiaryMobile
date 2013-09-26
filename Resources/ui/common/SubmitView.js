@@ -1,5 +1,6 @@
 var Database = require('ui/common/Database');
 var SubmittingView = require('ui/common/SubmittingView');
+var PictureView = require('ui/common/PictureView');
 
 Ti.include('/ui/lib/htmlparser.js');
 Ti.include('/ui/lib/soupselect.js');
@@ -547,12 +548,17 @@ function SubmitView(mainView, data, blob) {
       height: 200
     });
     self.view.add(imageViewView);
-    imageViewView.add(Ti.UI.createImageView({
+    var imageView = Ti.UI.createImageView({
       width: 'auto',
       height: 200,
       canScale : true,
       image: self.blob
-    }));
+    });
+    imageViewView.add(imageView);
+    imageView.addEventListener('click', function(e){
+      var pictureView = new PictureView(self.mainView, self.blob);
+      pictureView.open();
+    });
 
     self.formFields = {};
     for(var i=0; i<FIELDS.length; i++){

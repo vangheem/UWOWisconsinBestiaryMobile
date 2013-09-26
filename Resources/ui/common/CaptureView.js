@@ -1,5 +1,6 @@
 var Database = require('ui/common/Database');
 var SubmitView = require('ui/common/SubmitView');
+var PictureView = require('ui/common/PictureView');
 
 
 function CaptureView(mainView) {
@@ -11,6 +12,7 @@ function CaptureView(mainView) {
   self.latitude = null;
   self.altitude = null;
   self.captureDate = null;
+  self.pictureView = null;
 
   self.win = Ti.UI.createWindow({
     title: 'Capture',
@@ -41,7 +43,6 @@ function CaptureView(mainView) {
     width: 'auto',
     canScale : true
   });
-
 
   self.coordinatesLabel = Ti.UI.createLabel({
     bottom: '30%',
@@ -178,6 +179,13 @@ function CaptureView(mainView) {
     data = db.getItem(filename);
     var view = new SubmitView(self.mainView, data, fi);
     view.open();
+  });
+
+  self.imageView.addEventListener('click', function(e){
+    if(self.blob !== null){
+      self.pictureView = new PictureView(self.mainView, self.blob);
+      self.pictureView.open();
+    }
   });
 
   self.detectCoordinatesBtn.addEventListener('click', function(e){

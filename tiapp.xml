@@ -2,7 +2,7 @@
 <ti:app xmlns:ti="http://ti.appcelerator.org">
     <id>uwosh.wisconsinbestiary</id>
     <name>UWOWisconsinBestiary</name>
-    <version>1.2.1</version>
+    <version>1.3.0</version>
     <publisher>Donna Charley-Johnson</publisher>
     <url>http://www.uwosh.edu/wisconsinbestiary</url>
     <description>not specified</description>
@@ -27,7 +27,7 @@
         </orientations>
     </iphone>
     <android xmlns:android="http://schemas.android.com/apk/res/android">
-        <manifest android:versionCode="24" android:versionName="1.2.1"/>
+        <manifest android:versionCode="130" android:versionName="1.3.0"/>
     </android>
     <mobileweb>
         <precache/>
