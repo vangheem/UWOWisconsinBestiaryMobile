@@ -120,6 +120,15 @@ function CaptureView(mainView) {
     var cameraOptions = {
       mediaTypes:[Ti.Media.MEDIA_TYPE_PHOTO],
       error: function(e){
+        /*
+         * XXX for debugging on iOS
+        self.blob = Ti.Filesystem.getFile(Ti.Filesystem.resourcesDirectory + 'images/smallicon.png');
+        self.saveBtn.setEnabled(true);
+        self.submitBtn.setEnabled(true);
+        self.captureDate = new Date();
+        self.imageView.setImage(self.blob);
+        self.imageView.setVisible(true);
+        return;*/
         // create alert
         var a = Ti.UI.createAlertDialog({title:'Camera'});
         // set message
