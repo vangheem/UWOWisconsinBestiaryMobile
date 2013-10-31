@@ -89,6 +89,21 @@ var FIELDS = [
     required: false,
     type: TEXT
   },{
+    name: 'ecosystem-type',
+    label: 'Ecosystem Type',
+    required: false,
+    type: TEXTAREA
+  },{
+    name: 'observation-technique',
+    label: 'Observation Technique',
+    required: false,
+    type: TEXTAREA
+  },{
+    name: 'behavioral-description',
+    label: 'Behavioral Description',
+    required: false,
+    type: TEXTAREA
+  },{
     name: 'specific-text-you-would-like-used-to-acknowledge-photograph-interesting-anecdote-submission',
     label: 'Additional Information about the submission',
     required: false,
