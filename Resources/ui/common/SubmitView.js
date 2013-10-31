@@ -2,6 +2,7 @@ var Database = require('ui/common/Database');
 var SubmittingView = require('ui/common/SubmittingView');
 var PictureView = require('ui/common/PictureView');
 var ProgressIndicator = require('ui/common/ProgressIndicator');
+var AudioCaptureView = require('ui/common/AudioCaptureView');
 
 Ti.include('/ui/lib/htmlparser.js');
 Ti.include('/ui/lib/soupselect.js');
@@ -384,7 +385,10 @@ function SubmitView(mainView, data, blob) {
     self.loadForm();
   };
 
-
+  self.audioBtn = Ti.UI.createButton(self.mainView.buttonOptions({
+    title: "Add audio",
+    height: 130
+  }));
   self.submitBtn = Ti.UI.createButton(self.mainView.buttonOptions({
     title: "Submit",
     image: '/images/check.png',
@@ -398,6 +402,11 @@ function SubmitView(mainView, data, blob) {
 
   self.submitBtn.addEventListener('click', function(e){
     self.submitForm();
+  });
+
+  self.audioBtn.addEventListener('click', function(e){
+    var view = new AudioCaptureView(self.mainView);
+    view.open();
   });
 
   self.validate = function(){
@@ -615,6 +624,7 @@ function SubmitView(mainView, data, blob) {
       var pictureView = new PictureView(self.mainView, self.blob);
       pictureView.open();
     });
+    self.view.add(self.audioBtn);
 
     self.setupFields();
     // finally, add buttons
