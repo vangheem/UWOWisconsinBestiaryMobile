@@ -66,8 +66,20 @@ function MainView(application) {
     width: self.application.buttonWidth
   }));
 
+  self.creditLabel = Ti.UI.createLabel({
+    bottom: 0,
+    width: '100%',
+    font: {
+      size: 12
+    },
+    text: 'A Wisconsin Bestiary Website/App was supported by the Faculty ' +
+          'Development Program at the University of Wisconsin, Oshkosh',
+    textAlign: Ti.UI.TEXT_ALIGNMENT_CENTER
+  });
+
   self.view.add(self.captureBtn);
   self.view.add(self.listingBtn);
+  self.view.add(self.creditLabel);
 
   self.application.add(self.view);
 

@@ -1,6 +1,7 @@
 var Database = require('ui/common/Database');
 var SubmittingView = require('ui/common/SubmittingView');
 var PictureView = require('ui/common/PictureView');
+var ProgressIndicator = require('ui/common/ProgressIndicator');
 
 Ti.include('/ui/lib/htmlparser.js');
 Ti.include('/ui/lib/soupselect.js');
@@ -55,12 +56,7 @@ var FIELDS = [
     label: 'Affiliation',
     required: false,
     type: SELECT,
-    options: ['UW - Oshkosh', 'UW - Eau Claire', 'UW - Extension',
-              'UW - Green Bay', 'UW - La Crosse', 'UW - Madison',
-              'UW - Milwaukee', 'UW - Parkside', 'UW - Platteville',
-              'UW - River Falls', 'UW - Stevens Point', 'UW - Stout',
-              'UW - Superior', 'UW - Whitewater', 'Mosquito Hill Nature Center',
-              'Other']
+    options: ['UW - Oshkosh', 'Other']
   },{
     name: 'county',
     label: 'County',
@@ -83,10 +79,10 @@ var FIELDS = [
     name: 'animal',
     label: 'Group/Phyla',
     type: SELECT,
-    options: ["ameba", "amphibians", "bird", "centipedes", "ciliates", "crustacean",
-              "fish", "flagellate", "hydrai", "insect", "leech", "mammal",
-              "millpedes", "mussels", "reptile", "rotifer", "slug/snails",
-              "sponge", "ticks/spiders", "unsure"]
+    options: ["ameba", "amphibians", "bird", "butterflies", "centipedes",
+              "ciliates", "crustacean", "dragonflies", "fish", "flagellate",
+              "hydrai", "leech", "mammal", "millpedes", "mussels", "reptile",
+              "rotifer", "slug/snails", "sponge", "ticks/spiders", "unsure"]
   },{
     name: 'species',
     label: 'Species',
@@ -464,11 +460,18 @@ function SubmitView(mainView, data, blob) {
               var ffield = self.formFields[field.name];
               var errorBox = cssselect(error, '.fieldErrorBox');
               if(errorBox.length > 0){
+                var errorMsg = '';
+                try{
+                  errorMsg = 'Error in form. Field: ' + ffield.field.label +
+                             ', Error: ' + errorBox[0].children[0].raw +
+                             '. Please fix the error and re-submit';
+                }catch(e){
+                  errorMsg = 'Unknown form data error. Contact support.';
+                }
+
                 Ti.UI.createAlertDialog({
                   title: 'Error',
-                  message: 'Error in form. Field: ' + ffield.field.label +
-                           ', Error: ' + errorBox.children[0].raw +
-                           '. Please fix the error and re-submit',
+                  message: errorMsg,
                   buttonNames: ['OK']
                 }).show();
                 return;
@@ -526,6 +529,22 @@ function SubmitView(mainView, data, blob) {
     self.req.send(formData);
   };
 
+  self.setupFields = function(){
+    self.formFields = {};
+    for(var i=0; i<FIELDS.length; i++){
+      var field = FIELDS[i];
+      if(field.type === TEXT){
+        self.formFields[field.name] = new TextField(field, self.view);
+      } else if(field.type === SELECT){
+        self.formFields[field.name] = new Select(field, self.view);
+      } else if(field.type === TEXTAREA){
+        self.formFields[field.name] = new TextArea(field, self.view);
+      } else if(field.type === HIDDEN){
+        self.formFields[field.name] = new Hidden(field, self.view);
+      }
+    }
+  };
+
   self.loadForm = function(html){
 
     self.view.add(Ti.UI.createLabel({
@@ -560,19 +579,7 @@ function SubmitView(mainView, data, blob) {
       pictureView.open();
     });
 
-    self.formFields = {};
-    for(var i=0; i<FIELDS.length; i++){
-      var field = FIELDS[i];
-      if(field.type === TEXT){
-        self.formFields[field.name] = new TextField(field, self.view);
-      } else if(field.type === SELECT){
-        self.formFields[field.name] = new Select(field, self.view);
-      } else if(field.type === TEXTAREA){
-        self.formFields[field.name] = new TextArea(field, self.view);
-      } else if(field.type === HIDDEN){
-        self.formFields[field.name] = new Hidden(field, self.view);
-      }
-    }
+    self.setupFields();
     // finally, add buttons
     self.view.add(self.discardBtn);
     self.view.add(self.submitBtn);
