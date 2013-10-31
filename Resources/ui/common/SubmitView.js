@@ -441,18 +441,40 @@ function SubmitView(mainView, data, blob) {
       }
     }
     formData['image-to-append_file'] = self.blob;
+
+
+    /* add date/time of submission */
+    var dateField = 'date-photo-was-taken';
     var date = new Date(self.data.date);
-    formData['date-photo-was-taken_year'] = date.getFullYear();
+    formData[dateField + '_year'] = date.getFullYear();
     var month = date.getMonth() + '';
     if(month.length === 1){
       month = '0' + month;
     }
-    formData['date-photo-was-taken_month'] = month;
+    formData[dateField + '_month'] = month;
     var day = date.getDate() + '';
     if(day.length === 1){
       day = '0' + day;
     }
-    formData['date-photo-was-taken_day'] = day;
+    formData[dateField + '_day'] = day;
+    var hour = date.getHours();
+    var ampm = 'AM';
+    if(hour > 12){
+      hour = hour - 12;
+      ampm = 'PM';
+    }
+    hour = hour + '';
+    if(hour.length === 1){
+      hour = '0' + hour;
+    }
+    formData[dateField + '_hour'] = hour;
+    formData[dateField + '_ampm'] = ampm;
+    var minutes = date.getMinutes() + '';
+    if(minutes.length === 1){
+      minutes = '0' + minutes;
+    }
+    formData[dateField + '_minute'] = minutes;
+
 
     self.submittingView = new SubmittingView(self.mainView);
     self.submittingView.open();
