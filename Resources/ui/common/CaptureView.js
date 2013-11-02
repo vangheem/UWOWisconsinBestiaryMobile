@@ -121,14 +121,16 @@ function CaptureView(mainView) {
       mediaTypes:[Ti.Media.MEDIA_TYPE_PHOTO],
       error: function(e){
         /*
-         * XXX for debugging on iOS
-        self.blob = Ti.Filesystem.getFile(Ti.Filesystem.resourcesDirectory + 'images/smallicon.png');
-        self.saveBtn.setEnabled(true);
-        self.submitBtn.setEnabled(true);
-        self.captureDate = new Date();
-        self.imageView.setImage(self.blob);
-        self.imageView.setVisible(true);
-        return;*/
+         * XXX for debugging on iOS  */
+        if(Ti.Platform.model == 'google_sdk' || Ti.Platform.model == 'Simulator') {
+          self.blob = Ti.Filesystem.getFile(Ti.Filesystem.resourcesDirectory + 'images/smallicon.png');
+          self.saveBtn.setEnabled(true);
+          self.submitBtn.setEnabled(true);
+          self.captureDate = new Date();
+          self.imageView.setImage(self.blob);
+          self.imageView.setVisible(true);
+          return;
+        }
         // create alert
         var a = Ti.UI.createAlertDialog({title:'Camera'});
         // set message
@@ -186,7 +188,7 @@ function CaptureView(mainView) {
     var filename = db.add(data, self.blob);
     var fi = db.getFile(filename);
     data = db.getItem(filename);
-    var view = new SubmitView(self.mainView, data, fi);
+    var view = new SubmitView(self.mainView, data, fi.read());
     view.open();
   });
 

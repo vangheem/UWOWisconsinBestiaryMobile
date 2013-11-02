@@ -1,6 +1,11 @@
 exports = {};
 
-exports.submission_url = 'http://www.uwosh.edu/wisconsinbestiary/submissions';
+if(Ti.Platform.model == 'google_sdk' || Ti.Platform.model == 'Simulator') {
+  exports.submission_url = 'http://www.uwosh.edu/wisconsinbestiary/copy_of_submissions';
+}else{
+  exports.submission_url = 'http://www.uwosh.edu/wisconsinbestiary/submissions';
+}
+
 exports.form_selector = 'div.pfg-form form';
 exports.form_data = {
   'agreement:list': 'I agree',
