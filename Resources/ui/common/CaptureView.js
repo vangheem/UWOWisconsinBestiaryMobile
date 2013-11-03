@@ -1,5 +1,5 @@
 var Database = require('ui/common/Database');
-var SubmitView = require('ui/common/SubmitView');
+var SubmitView = require('ui/common/submit/View');
 var PictureView = require('ui/common/PictureView');
 
 

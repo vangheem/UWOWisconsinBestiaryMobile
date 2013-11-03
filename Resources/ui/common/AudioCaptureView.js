@@ -23,7 +23,7 @@ function AudioCaptureView(mainView) {
     width: self.application.buttonWidth
   }));
   self.selectBtn = Ti.UI.createButton(self.mainView.buttonOptions({
-    title: 'Select audio from phone',
+    title: 'Or select audio from device',
     bottom: '18%',
     height: self.application.largeButtonHeight,
     width: self.application.buttonWidth
@@ -35,6 +35,12 @@ function AudioCaptureView(mainView) {
   self.win.add(self.view);
   self.mainView.addHeader(self.win);
 
+
+  self.recordBtn.addEventListener('click', function(e){
+  });
+
+  self.selectBtn.addEventListener('click', function(e){
+  });
 
 
   self.open = function(){
