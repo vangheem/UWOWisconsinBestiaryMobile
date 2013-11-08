@@ -95,6 +95,7 @@ function SubmitView(mainView, data, blob) {
       var pictureView = new PictureView(self.mainView, self.blob);
       pictureView.open();
     });
+    /* XXX do not add audio btn right now */
     self.view.add(self.audioBtn);
 
     self.form.load();
