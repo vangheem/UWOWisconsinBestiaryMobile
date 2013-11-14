@@ -80,8 +80,9 @@ var FIELDS = [
     type: SELECT,
     options: ["ameba", "amphibians", "bird", "butterflies", "centipedes",
               "ciliates", "crustacean", "dragonflies", "fish", "flagellate",
-              "hydrai", "leech", "mammal", "millpedes", "mussels", "reptile",
-              "rotifer", "slug/snails", "sponge", "ticks/spiders", "unsure"]
+              "flatworm", "hydrai", "leech", "mammal", "millpedes", "mussels",
+              "reptile", "rotifer", "slug/snails", "sponge", "ticks/spiders",
+              "unsure"]
   },{
     name: 'species',
     label: 'Species',
