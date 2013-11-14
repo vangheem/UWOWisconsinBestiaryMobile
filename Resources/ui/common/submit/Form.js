@@ -408,7 +408,7 @@ function Form(submitView) {
     var dateField = 'date-photo-was-taken';
     var date = new Date(self.submitView.data.date);
     formData[dateField + '_year'] = date.getFullYear();
-    var month = date.getMonth() + '';
+    var month = (date.getMonth() + 1) + '';
     if(month.length === 1){
       month = '0' + month;
     }
