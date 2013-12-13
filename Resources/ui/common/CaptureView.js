@@ -1,9 +1,11 @@
+/*global window, alert, decodeURIComponent, define, Ti, Titanium */
+
 var Database = require('ui/common/Database');
 var SubmitView = require('ui/common/submit/View');
 var PictureView = require('ui/common/PictureView');
 
 
-function CaptureView(mainView) {
+function CaptureView(mainView, callback) {
   var self = this;
   self.mainView = mainView;
   self.application = mainView.application;
@@ -11,8 +13,13 @@ function CaptureView(mainView) {
   self.longitude = null;
   self.latitude = null;
   self.altitude = null;
-  self.captureDate = null;
   self.pictureView = null;
+  if(!callback){
+    self.callback = function(photo){
+    };
+  }else{
+    self.callback = callback;
+  }
 
   self.win = Ti.UI.createWindow({
     title: 'Capture',
@@ -30,12 +37,6 @@ function CaptureView(mainView) {
     top: '1%',
     image: '/images/photo.png'
   }));
-  self.detectCoordinatesBtn = Ti.UI.createButton(self.mainView.buttonOptions({
-    title: 'Get current coordinates',
-    top: '14%',
-    visible: false,
-    image: '/images/global.png'
-  }));
   self.imageView = Ti.UI.createImageView({
     top: self.application.previewImageTop,
     visible: false,
@@ -44,19 +45,8 @@ function CaptureView(mainView) {
     canScale : true
   });
 
-  self.coordinatesLabel = Ti.UI.createLabel({
-    bottom: '30%',
-    text: ''
-  });
-
   self.saveBtn = Ti.UI.createButton(self.mainView.buttonOptions({
-    title: 'Save for later',
-    bottom: '15%',
-    image: '/images/disk.png',
-    enabled: false
-  }));
-  self.submitBtn = Ti.UI.createButton(self.mainView.buttonOptions({
-    title: 'Submit',
+    title: 'Finish',
     bottom: '1%',
     image: '/images/add.png',
     enabled: false
@@ -65,38 +55,18 @@ function CaptureView(mainView) {
 
   self.win.add(self.view);
   self.view.add(self.captureBtn);
-  self.view.add(self.detectCoordinatesBtn);
-  self.view.add(self.coordinatesLabel);
   self.view.add(self.imageView);
   self.view.add(self.saveBtn);
-  self.view.add(self.submitBtn);
   self.mainView.addHeader(self.win);
 
-
-  self.detectCoordinates = function(){
-    Ti.Geolocation.getCurrentPosition(function(e){
-      if (!e.success || e.error) {
-        alert('Could not detect coordinates. Make sure GPS is on and ' +
-              'detecting you location and try again or manually input ' +
-              'your coordinates in the next form.');
-        // XXX show a detect coordinates button
-        self.detectCoordinatesBtn.setVisible(true);
-        self.coordinatesLabel.setText('No coordinates detected');
-        return;
-      } else {
-        self.detectCoordinatesBtn.setVisible(false);
-      }
-
-      self.longitude = e.coords.longitude;
-      self.latitude = e.coords.latitude;
-      self.altitude = e.coords.altitude;
-      self.coordinatesLabel.setText('Longitude: ' + self.longitude + '\n' +
-        'Latitude: ' + self.latitude + '\n' +
-        'Altitude: ' + self.altitude + '\n');
-    });
+  self.testImage = function(){
+    self.blob = Ti.Filesystem.getFile(Ti.Filesystem.resourcesDirectory + 'images/smallicon.png');
+    self.saveBtn.setEnabled(true);
+    self.imageView.setImage(self.blob);
+    self.imageView.setVisible(true);
   };
 
-  self.captureBtn.addEventListener('click', function(e){
+  self.captureBtn.addEventListener('click', function(){
     var button = Titanium.UI.createButton({
       color : '#fff',
       bottom : '10%',
@@ -116,25 +86,20 @@ function CaptureView(mainView) {
     button.addEventListener('click', function() {
       Ti.Media.takePicture();
     });
+    /*
+     * XXX for debugging on iOS  */
+    if(Ti.Platform.model === 'google_sdk' || Ti.Platform.model === 'Simulator') {
+      self.testImage();
+      return;
+    }
 
     var cameraOptions = {
       mediaTypes:[Ti.Media.MEDIA_TYPE_PHOTO],
       error: function(e){
-        /*
-         * XXX for debugging on iOS  */
-        if(Ti.Platform.model == 'google_sdk' || Ti.Platform.model == 'Simulator') {
-          self.blob = Ti.Filesystem.getFile(Ti.Filesystem.resourcesDirectory + 'images/smallicon.png');
-          self.saveBtn.setEnabled(true);
-          self.submitBtn.setEnabled(true);
-          self.captureDate = new Date();
-          self.imageView.setImage(self.blob);
-          self.imageView.setVisible(true);
-          return;
-        }
         // create alert
         var a = Ti.UI.createAlertDialog({title:'Camera'});
         // set message
-        if (e.code == Ti.Media.NO_CAMERA){
+        if (e.code === Ti.Media.NO_CAMERA){
           a.setMessage('Phone does not have a camera');
         } else {
           a.setMessage('Unexpected error using camera: ' + e.code);
@@ -145,10 +110,7 @@ function CaptureView(mainView) {
       success: function(mediaItem){
         if(mediaItem.success){
           self.blob = mediaItem.media;
-          self.detectCoordinates();
           self.saveBtn.setEnabled(true);
-          self.submitBtn.setEnabled(true);
-          self.captureDate = new Date();
           self.imageView.setImage(self.blob);
           self.imageView.setVisible(true);
         } else {
@@ -174,41 +136,25 @@ function CaptureView(mainView) {
     Ti.Media.showCamera(cameraOptions);
   });
 
-  self.saveBtn.addEventListener('click', function(e){
-    var db = new Database();
-    var data = self.getData();
-    db.add(data, self.blob);
-    self.application.close(self.win);
+  self.saveBtn.addEventListener('click', function(){
+    if(self.blob){
+      self.callback(self.blob);
+      self.application.close(self.win);
+    }
   });
 
-  self.submitBtn.addEventListener('click', function(e){
-    // store it and then retrieve it for submission
-    var db = new Database();
-    var data = self.getData();
-    var filename = db.add(data, self.blob);
-    var fi = db.getFile(filename);
-    data = db.getItem(filename);
-    var view = new SubmitView(self.mainView, data, fi.read());
-    view.open();
-  });
-
-  self.imageView.addEventListener('click', function(e){
+  self.imageView.addEventListener('click', function(){
     if(self.blob !== null){
       self.pictureView = new PictureView(self.mainView, self.blob);
       self.pictureView.open();
     }
   });
 
-  self.detectCoordinatesBtn.addEventListener('click', function(e){
-    self.detectCoordinates();
-  });
-
   self.getData = function(){
     return {
       longitude: self.longitude,
       latitude: self.latitude,
-      altitude: self.altitude,
-      date: self.captureDate
+      altitude: self.altitude
     };
   };
 

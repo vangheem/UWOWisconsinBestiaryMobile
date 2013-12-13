@@ -1,3 +1,7 @@
+/*global window, alert, decodeURIComponent, define, Ti, Titanium */
+var SubmitView = require('ui/common/submit/View');
+var ExistingView = require('ui/common/ExistingView');
+
 function MainView(application) {
   var self = this;
   self.application = application;
@@ -11,16 +15,16 @@ function MainView(application) {
               'or location will not be detected for images.'
     }).show();
   } else {
-    if (Titanium.Platform.name != 'android') {
+    if (Titanium.Platform.name !== 'android') {
       var authorization = Ti.Geolocation.locationServicesAuthorization;
       Ti.API.info('Authorization: ' + authorization);
-      if (authorization == Ti.Geolocation.AUTHORIZATION_DENIED) {
+      if (authorization === Ti.Geolocation.AUTHORIZATION_DENIED) {
         Ti.UI.createAlertDialog({
           title:'Location',
           message:'You have disallowed geolocation services. ' +
                   'Photos will not have locations with them.'
         }).show();
-      } else if (authorization == Titanium.Geolocation.AUTHORIZATION_RESTRICTED) {
+      } else if (authorization === Titanium.Geolocation.AUTHORIZATION_RESTRICTED) {
         Ti.UI.createAlertDialog({
           title:'Location',
           message:'Your system has disallowed geolocation services.'
@@ -51,10 +55,10 @@ function MainView(application) {
     return opts;
   };
 
-  self.captureBtn = Ti.UI.createButton(self.buttonOptions({
+  self.newBtn = Ti.UI.createButton(self.buttonOptions({
     top: '18%',
     image: '/images/photo.png',
-    title: 'Capture image',
+    title: 'Start new submission',
     height: self.application.largeButtonHeight,
     width: self.application.buttonWidth
   }));
@@ -77,23 +81,25 @@ function MainView(application) {
     textAlign: Ti.UI.TEXT_ALIGNMENT_CENTER
   });
 
-  self.view.add(self.captureBtn);
+  self.view.add(Ti.UI.createLabel({
+    text: 'Thank you for contributing to the Wisconsin Bestiary project',
+    top: '5%',
+    width: '100%',
+    textAlign: Ti.UI.TEXT_ALIGNMENT_CENTER
+  }));
+  self.view.add(self.newBtn);
   self.view.add(self.listingBtn);
   self.view.add(self.creditLabel);
 
   self.application.add(self.view);
 
-  /* imports */
-  var CaptureView = require('ui/common/CaptureView');
-  var ExistingView = require('ui/common/ExistingView');
-
   /* register event listeners */
-  self.captureBtn.addEventListener('click', function(e){
-    var view = new CaptureView(self);
-    self.application.openNew(view.win);
+  self.newBtn.addEventListener('click', function(){
+    var view = new SubmitView(self);
+    view.open();
   });
 
-  self.listingBtn.addEventListener('click', function(e){
+  self.listingBtn.addEventListener('click', function(){
     var view = new ExistingView(self);
     self.application.openNew(view.win);
   });

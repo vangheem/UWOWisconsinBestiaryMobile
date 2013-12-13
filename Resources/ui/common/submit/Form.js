@@ -1,3 +1,5 @@
+/*global window, alert, decodeURIComponent, define, Ti, Titanium */
+
 var Database = require('ui/common/Database');
 var SubmittingView = require('ui/common/SubmittingView');
 var ProgressIndicator = require('ui/common/ProgressIndicator');
@@ -360,7 +362,7 @@ function Form(submitView) {
   self.submitView = submitView;
   self.view = self.submitView.view;
   self.mainView = self.submitView.mainView;
-
+  self.weather_info = null;
 
   self.validate = function(){
     for(var fieldname in self.fields){
@@ -377,19 +379,9 @@ function Form(submitView) {
     }
   };
 
-  self.submit = function(){
-    if(!self.validate()){
-      return;
-    }
-    if(!Ti.Network.online){
-      Ti.UI.createAlertDialog({
-        title: 'Network',
-        message: 'No network connection detected. Please try submitting again later',
-        buttonNames: ['OK']
-      }).show();
-      return;
-    }
-
+  self.getRawData = function(){
+    // differs from getData in that it only gets raw form field
+    // data, not the generated form data
     var formData = {}, i=0;
     for(var attrname in settings.form_data){
       formData[attrname] = settings.form_data[attrname];
@@ -402,45 +394,152 @@ function Form(submitView) {
         formData[val[0]] = val[1];
       }
     }
-    formData['image-to-append_file'] = self.submitView.blob;
+    formData.date = self.submitView.date;
+    return formData;
+  };
 
+  self.getFormData = function(){
+    var formData = self.getRawData();
+
+    if(self.submitView.photo){
+      formData['image-to-append_file'] = self.submitView.photo;
+    }
+    if(self.submitView.audio){
+      formData.audio_file = self.submitView.audio;
+    }
 
     /* add date/time of submission */
     var dateField = 'date-photo-was-taken';
-    var date = new Date(self.submitView.data.date);
-    formData[dateField + '_year'] = date.getFullYear();
-    var month = (date.getMonth() + 1) + '';
-    if(month.length === 1){
-      month = '0' + month;
+    if(self.submitView.data.date){
+      var date = new Date(self.submitView.data.date);
+      formData[dateField + '_year'] = date.getFullYear();
+      var month = (date.getMonth() + 1) + '';
+      if(month.length === 1){
+        month = '0' + month;
+      }
+      formData[dateField + '_month'] = month;
+      var day = date.getDate() + '';
+      if(day.length === 1){
+        day = '0' + day;
+      }
+      formData[dateField + '_day'] = day;
+      var hour = date.getHours();
+      var ampm = 'AM';
+      if(hour > 12){
+        hour = hour - 12;
+        ampm = 'PM';
+      }
+      hour = hour + '';
+      if(hour.length === 1){
+        hour = '0' + hour;
+      }
+      formData[dateField + '_hour'] = hour;
+      formData[dateField + '_ampm'] = ampm;
+      var minutes = date.getMinutes() + '';
+      if(minutes.length === 1){
+        minutes = '0' + minutes;
+      }
+      formData[dateField + '_minute'] = minutes;
     }
-    formData[dateField + '_month'] = month;
-    var day = date.getDate() + '';
-    if(day.length === 1){
-      day = '0' + day;
-    }
-    formData[dateField + '_day'] = day;
-    var hour = date.getHours();
-    var ampm = 'AM';
-    if(hour > 12){
-      hour = hour - 12;
-      ampm = 'PM';
-    }
-    hour = hour + '';
-    if(hour.length === 1){
-      hour = '0' + hour;
-    }
-    formData[dateField + '_hour'] = hour;
-    formData[dateField + '_ampm'] = ampm;
-    var minutes = date.getMinutes() + '';
-    if(minutes.length === 1){
-      minutes = '0' + minutes;
-    }
-    formData[dateField + '_minute'] = minutes;
+    return formData;
+  };
 
+  self.submit = function(callback){
+    if(!callback){
+      callback = function(result){};
+    }
+    if(!self.validate()){
+      callback({'success': false});
+      return;
+    }
+    if(!Ti.Network.online){
+      Ti.UI.createAlertDialog({
+        title: 'Network',
+        message: 'No network connection detected. Please try submitting again later',
+        buttonNames: ['OK']
+      }).show();
+      callback({'success': false});
+      return;
+    }
+
+    var formData = self.getFormData();
 
     self.submittingView = new SubmittingView(self.mainView);
     self.submittingView.open();
 
+    self._getWeatherData(formData, function(){
+      if(self.weather_info){
+        formData.weather = JSON.stringify(self.weather_info);
+      }
+      self._submitForm(formData, function(res){
+        callback(res);
+      });
+    });
+  };
+
+  self._getWeatherData = function(formData, callback){
+    if(self.submitView.data.date && formData.latitude && formData.logitude){
+      var date = new Date(self.submitView.data.date);
+      var req = Ti.Network.createHTTPClient();
+      setRequestHeaders(req);
+      req.onload = function(resp){
+        var weather = JSON.parse(req.responseText);
+        if(!self.weather_info && weather && weather.history &&
+            weather.history.observations && weather.history.observations.length){
+          var observations = weather.history.observations;
+          // go through all weather data and find closest match
+          var match = observations[0];
+          var hour = date.getHours();
+          var minute = date.getMinutes();
+          var mhour = parseInt(match.hour);
+          var mminute = parseInt(match.min);
+          for(var i=1; i<observations.length; i++){
+            var period = observations[i];
+            var pdate = period.date;
+            var phour = parseInt(pdate.hour);
+            var pminute = parseInt(pdate.min);
+            var isMatch = false;
+            if(Math.abs(hour - phour) == Math.abs(hour - mhour)){
+              // same hour, check minutes now
+              if(Math.abs(minute - pminute) <= Math.abs(minute - mminute)){
+                isMatch = true;
+              }
+            }else if(Math.abs(hour - phour) < Math.abs(hour - mhour)){
+              isMatch = true;
+            }
+            if(isMatch){
+              match = period;
+              mhour = phour;
+              mminute = pminute;
+            }
+          }
+          self.weather_info = match;
+        }
+        callback();
+      };
+      req.onerror = function(resp){
+        callback();
+      };
+      var month = date.getMonth() + '';
+      if(month.length === 1){
+        month = '0' + month;
+      }
+      var day = date.getDay() + '';
+      if(day.length === 1){
+        day = '0' + day;
+      }
+      var url = settings.weather_api_url.replace(
+        '[date]', '' + date.getFullYear() + month + day).replace(
+        '[long]', formData.logitude).replace(
+        '[lat]', formData.latitude);
+      req.open('GET', url);
+      req.send();
+    }else{
+      callback();
+    }
+  };
+
+  self._submitForm = function(formData, callback){
     self.req = Ti.Network.createHTTPClient();
     setRequestHeaders(self.req);
     self.req.onload = function(resp){
@@ -473,6 +572,7 @@ function Form(submitView) {
                   message: errorMsg,
                   buttonNames: ['OK']
                 }).show();
+                callback({'success': true});
                 return;
               }
             }
@@ -485,19 +585,7 @@ function Form(submitView) {
               message: 'Wisconsin Bestiary Submission Successful',
               buttonNames: ['OK']
             }).show();
-
-            // XXX Success, close the form, clear the data
-            //
-            var db = new Database();
-            db.removeItem(self.submitView.data.filename);
-            db.setUserData(
-              self.fields['first-name'].widget.getValue(),
-              self.fields['last-name'].widget.getValue(),
-              self.fields.replyto.widget.getValue()
-            );
-            db = null;
-            self.submitView.application.close(self.submitView.win);
-
+            callback({success: true});
           } else {
             Ti.UI.createAlertDialog({
               title: 'Error',

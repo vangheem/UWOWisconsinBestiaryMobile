@@ -37,7 +37,9 @@
         </splash>
         <theme>default</theme>
     </mobileweb>
-    <modules/>
+    <modules>
+        <module version="0.1" platform="android">titutorial.audiorecorder</module>
+    </modules>
     <deployment-targets>
         <target device="android">true</target>
         <target device="blackberry">false</target>

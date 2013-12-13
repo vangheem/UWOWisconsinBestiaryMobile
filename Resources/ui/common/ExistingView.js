@@ -1,3 +1,5 @@
+/*global window, alert, decodeURIComponent, define, Ti, Titanium */
+
 var Database = require('ui/common/Database');
 var SubmitView = require('ui/common/submit/View');
 
@@ -18,9 +20,10 @@ function ExistingView(mainView) {
     top: 64
   });
 
+  var db = Database();
+
   //some dummy data for our table view
   var tableData = [];
-  var db = Database();
   self.data = db.get();
   for(var i=0; i<self.data.length; i++){
     var item = self.data[i];
@@ -40,20 +43,24 @@ function ExistingView(mainView) {
       left: 130
     });
 
-    var imageViewView = Ti.UI.createView({
-      width: 120,
-      height: 120,
-      top: 0,
-      left: 5
-    });
-    var image = db.getFile(item.filename);
-    imageViewView.add(Ti.UI.createImageView({
-      width: 'auto',
-      height: 120,
-      canScale : true,
-      image: image
-    }));
-    row.add(imageViewView);
+    if(item.filename){
+      var fi = db.getFile(item.filename);
+      if(fi.exists()){
+        var imageViewView = Ti.UI.createView({
+          width: 120,
+          height: 120,
+          top: 0,
+          left: 5
+        });
+        imageViewView.add(Ti.UI.createImageView({
+          width: 'auto',
+          height: 120,
+          canScale : true,
+          image: fi
+        }));
+        row.add(imageViewView);
+      }
+    }
     row.add(label);
     tableData.push(row);
   }
@@ -74,16 +81,6 @@ function ExistingView(mainView) {
       }).show();
       return;
     }
-    var db = Database();
-    var fi = db.getFile(item.filename);
-    if(!fi.exists()){
-      Ti.UI.createAlertDialog({
-        title: 'Missing',
-        message: 'Unexpected error, could not find photo associated with record',
-        buttonNames: ['OK']
-      }).show();
-      return;
-    }
     self.view.remove(self.table);
     var loading = Ti.UI.createLabel({
       text: 'Loading...',
@@ -93,7 +90,22 @@ function ExistingView(mainView) {
       }
     });
     self.view.add(loading);
-    var view = new SubmitView(self.mainView, item, fi.read());
+    var db = Database();
+    var photo;
+    if(item.filename){
+      photo = db.getFile(item.filename);
+      if(photo.exists()){
+        photo = photo.read();
+      }
+    }
+    var audio;
+    if(item.audio_filename){
+      audio = db.getFile(item.audio_filename);
+      if(audio.exists()){
+        audio = audio.read();
+      }
+    }
+    var view = new SubmitView(self.mainView, item, photo, audio);
     // XXX self.win.close();
     view.open();
     self.application.close(self.win);

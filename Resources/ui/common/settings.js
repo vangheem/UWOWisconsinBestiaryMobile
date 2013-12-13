@@ -1,10 +1,12 @@
+/*global window, alert, decodeURIComponent, define, Ti, Titanium */
+
 exports = {};
 
-if(Ti.Platform.model == 'google_sdk' || Ti.Platform.model == 'Simulator') {
+//if(Ti.Platform.model === 'google_sdk' || Ti.Platform.model === 'Simulator') {
   exports.submission_url = 'http://www.uwosh.edu/wisconsinbestiary/copy_of_submissions';
-}else{
-  exports.submission_url = 'http://www.uwosh.edu/wisconsinbestiary/submissions';
-}
+//}else{
+//  exports.submission_url = 'http://www.uwosh.edu/wisconsinbestiary/submissions';
+//}
 
 exports.form_selector = 'div.pfg-form form';
 exports.form_data = {
@@ -22,7 +24,13 @@ exports.form_data = {
   'date-photo-was-taken_ampm': '',
   'form_submit': 'Submit',
   'app-version': Ti.App.version,
-  'device': Ti.Platform.osname + ' ' + Ti.Platform.version + ': ' + Ti.Platform.model
+  'device': Ti.Platform.osname + ' ' + Ti.Platform.version + ': ' + Ti.Platform.model,
+  'weather': 'No weather detected. Possibly due to no coordinates or ' +
+             'no weather data available.'
 };
+
+// Weather api settings
+exports.weather_api_url = 'http://api.wunderground.com/api/e1594663d8fb93c2' +
+                          '/history_[date]/q/[long],[lat].json';
 
 settings = exports;
