@@ -86,8 +86,8 @@ function SubmitView(mainView, data, photo, audio) {
     height: 100
   }));
   self.imageViewView = Ti.UI.createView({
-    width: 200,
-    height: 200
+    width: 150,
+    height: 150
   });
 
   self.submitBtn.addEventListener('click', function(){
@@ -166,7 +166,7 @@ function SubmitView(mainView, data, photo, audio) {
     if(self.photo){
       var imageView = Ti.UI.createImageView({
         width: 'auto',
-        height: 200,
+        height: 150,
         canScale : true,
         image: self.photo
       });
@@ -175,9 +175,9 @@ function SubmitView(mainView, data, photo, audio) {
         var pictureView = new PictureView(self.mainView, self.photo);
         pictureView.open();
       });
-      self.imageViewView.setVisible(true);
+      self.imageViewView.setHeight(150);
     }else{
-      self.imageViewView.setVisible(false);
+	  self.imageViewView.setHeight(0);
     }
   };
 
@@ -194,14 +194,22 @@ function SubmitView(mainView, data, photo, audio) {
       //
       // mispelled on purppose here...
       // they have bad spelling in their form.
-      self.form.fields.logitude.widget.setValue(e.coords.longitude);
-      self.form.fields.latitude.widget.setValue(e.coords.latitude);
-      self.form.fields.altitude.widget.setValue(e.coords.altitude);
-
-      self.coordinatesLabel.setText('Longitude: ' + e.coords.longitude + '\n' +
-        'Latitude: ' + e.coords.latitude + '\n' +
-        'Altitude: ' + e.coords.altitude + '\n');
+      self.form.fields.logitude.setValue(e.coords.longitude);
+      self.form.fields.latitude.setValue(e.coords.latitude);
+      self.form.fields.altitude.setValue(e.coords.altitude);
+      self.data.logitude = e.coords.longitude;
+      self.data.latitude = e.coords.latitude;
+      self.data.altitude = e.coords.altitude;
+      self.setCoordinatesLabel();
     });
+  };
+
+  self.setCoordinatesLabel = function(){
+  	if(self.data.logitude){
+  	  self.coordinatesLabel.setText('Longitude: ' + self.data.logitude + '\n' +
+          'Latitude: ' + self.data.latitude + '\n' +
+          'Altitude: ' + self.data.altitude + '\n');
+    }
   };
 
   self.loadForm = function(){
@@ -222,8 +230,8 @@ function SubmitView(mainView, data, photo, audio) {
     }));
 
     self.view.add(self.photoBtn);
-    self.view.add(self.imageViewView);
     self.showImage();
+    self.view.add(self.imageViewView);
 
     self.view.add(self.audioBtn);
     self.view.add(self.audioLbl);
@@ -240,24 +248,25 @@ function SubmitView(mainView, data, photo, audio) {
     for(var fieldName in self.data){
       if(self.form.fields[fieldName]){
         // XXX might need to do something more tricky here...
-        self.form.fields[fieldName].widget.setValue(self.data[fieldName]);
+        self.form.fields[fieldName].setValue(self.data[fieldName]);
       }
     }
+    self.setCoordinatesLabel();
     /* XXX check wonky case... */
     if(self.data.longitude){
-      self.form.fields.logitude.widget.setValue(self.data.longitude);
+      self.form.fields.logitude.setValue(self.data.longitude);
     }
     var db = new Database();
     var userData = db.getUserData();
     if(userData){
       if(!self.form.fields['first-name'].value()){
-        self.form.fields['first-name'].widget.setValue(userData.first);
+        self.form.fields['first-name'].setValue(userData.first);
       }
       if(!self.form.fields['last-name'].value()){
-        self.form.fields['last-name'].widget.setValue(userData.last);
+        self.form.fields['last-name'].setValue(userData.last);
       }
       if(!self.form.fields.replyto.value()){
-        self.form.fields.replyto.widget.setValue(userData.email);
+        self.form.fields.replyto.setValue(userData.email);
       }
       db = null;
     }

@@ -159,6 +159,9 @@ function TextField(field, container){
   self.value = function(){
     return self.widget.getValue();
   };
+  self.setValue = function(val){
+  	self.widget.setValue(val);
+  };
 
   self.enable = function(){
     self.widget.setEnabled(true);
@@ -207,6 +210,12 @@ function Select(field, container){
   self.value = function(){
     return self._value;
   };
+  self.setValue = function(val){
+  	var index = self.options.indexOf(val);
+  	if(index !== -1){
+  	  self.widget.setSelectedRow(0, index, false);
+  	}
+  };
 
   self.enable = function(){
     self.widget.setEnabled(true);
@@ -247,6 +256,9 @@ function TextArea(field, container){
   self.value = function(){
     return self.widget.getValue();
   };
+  self.setValue = function(val){
+  	self.widget.setValue(val);
+  };
 
   self.enable = function(){
     self.widget.setEnabled(true);
@@ -270,6 +282,9 @@ function Hidden(field, container){
   };
   self.value = function(){
     return self.field.value;
+  };
+  self.setValue = function(val){
+  	self.widget.setValue(val);
   };
 
   self.enable = function(){};

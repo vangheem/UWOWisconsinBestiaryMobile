@@ -2,11 +2,11 @@
 
 exports = {};
 
-//if(Ti.Platform.model === 'google_sdk' || Ti.Platform.model === 'Simulator') {
+if(Ti.Platform.model === 'google_sdk' || Ti.Platform.model === 'Simulator') {
   exports.submission_url = 'http://www.uwosh.edu/wisconsinbestiary/copy_of_submissions';
-//}else{
-//  exports.submission_url = 'http://www.uwosh.edu/wisconsinbestiary/submissions';
-//}
+}else{
+  exports.submission_url = 'http://www.uwosh.edu/wisconsinbestiary/submissions';
+}
 
 exports.form_selector = 'div.pfg-form form';
 exports.form_data = {
@@ -31,6 +31,6 @@ exports.form_data = {
 
 // Weather api settings
 exports.weather_api_url = 'http://api.wunderground.com/api/e1594663d8fb93c2' +
-                          '/history_[date]/q/[long],[lat].json';
+                          '/history_[date]/q/[lat],[long].json';
 
 settings = exports;

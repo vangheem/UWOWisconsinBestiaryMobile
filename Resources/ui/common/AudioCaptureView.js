@@ -96,6 +96,7 @@ function AudioCaptureView(view, callback) {
 
   var IOSRecorder = function(){
     var rcd = this;
+    Ti.Media.audioSessionMode = Ti.Media.AUDIO_SESSION_MODE_PLAY_AND_RECORD;
     rcd.recorder = Ti.Media.createAudioRecorder({
       format: Ti.Media.AUDIO_FILEFORMAT_WAVE
     });
