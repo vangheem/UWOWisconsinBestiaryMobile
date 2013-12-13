@@ -131,7 +131,9 @@ function CaptureView(mainView, callback) {
         //
       }
     }else{
-      cameraOptions.overlay = overlay;
+      if(Ti.Platform.version[0] == '4'){
+        cameraOptions.overlay = overlay;
+      }
     }
     Ti.Media.showCamera(cameraOptions);
   });
