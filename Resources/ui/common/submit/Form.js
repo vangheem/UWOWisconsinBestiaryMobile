@@ -59,6 +59,35 @@ var FIELDS = [
     type: SELECT,
     options: ['UW - Oshkosh', 'Other']
   },{
+    name: 'animal',
+    label: 'Group/Phyla',
+    type: SELECT,
+    options: ["ameba", "amphibians", "bird", "butterflies", "centipedes",
+              "ciliates", "crustacean", "dragonflies", "fish", "flagellate",
+              "flatworm", "hydrai", "leech", "mammal", "millpedes", "mussels",
+              "reptile", "rotifer", "slug/snails", "sponge", "ticks/spiders",
+              "unsure"]
+  },{
+    name: 'common-name',
+    label: 'Common Name',
+    required: false,
+    type: TEXT
+  },{
+    name: 'species',
+    label: 'Species',
+    required: false,
+    type: TEXT
+  },{
+    name: 'how-many-of-this-animal-did-you-see',
+    label: 'How many of this animal did you see?',
+    required: false,
+    type: TEXT
+  },{
+    name: 'behavioral-description',
+    label: 'Behavioral Description',
+    required: false,
+    type: TEXTAREA
+  },{
     name: 'county',
     label: 'County',
     required: false,
@@ -77,32 +106,18 @@ var FIELDS = [
               "Vernon", "Vilas", "Walworth", "Washburn", "Washington",
               "Waukesha", "Waupaca", "Waushara", "Winnebago", "Wood"]
   },{
-    name: 'animal',
-    label: 'Group/Phyla',
+    name: 'observation-technique-1',
+    label: 'Observation Technique',
     type: SELECT,
-    options: ["ameba", "amphibians", "bird", "butterflies", "centipedes",
-              "ciliates", "crustacean", "dragonflies", "fish", "flagellate",
-              "flatworm", "hydrai", "leech", "mammal", "millpedes", "mussels",
-              "reptile", "rotifer", "slug/snails", "sponge", "ticks/spiders",
-              "unsure"]
+    options: ["Casual", "Stationary", "Traveling", "Area", "Other"]
   },{
-    name: 'species',
-    label: 'Species',
+    name: 'observation-technique',
+    label: 'Observation Technique(Other)',
     required: false,
-    type: TEXT
+    type: TEXTAREA
   },{
     name: 'ecosystem-type',
     label: 'Ecosystem Type',
-    required: false,
-    type: TEXTAREA
-  },{
-    name: 'observation-technique',
-    label: 'Observation Technique',
-    required: false,
-    type: TEXTAREA
-  },{
-    name: 'behavioral-description',
-    label: 'Behavioral Description',
     required: false,
     type: TEXTAREA
   },{
@@ -152,7 +167,6 @@ function TextField(field, container){
     keyboardType: keyboardType
   });
   self.container.add(self.widget);
-
   self.data = function(){
     return [[self.field.name, self.value()]];
   };
@@ -160,7 +174,7 @@ function TextField(field, container){
     return self.widget.getValue();
   };
   self.setValue = function(val){
-  	self.widget.setValue(val);
+   self.widget.setValue(val);
   };
 
   self.enable = function(){
@@ -485,6 +499,15 @@ function Form(submitView) {
     self._getWeatherData(formData, function(){
       if(self.weather_info){
         formData.weather = JSON.stringify(self.weather_info);
+        formData['degrees-celcius'] = self.weather_info.tempm;
+        formData['wind-speed-mph'] = self.weather_info.wspdi;
+        formData['wind-direction'] = self.weather_info.wdire;
+        formData['pressure-mbar'] = self.weather_info.pressurem;
+        if((self.weather_info.precipi + '')[0] !== '-'){
+          formData['precipitation-inches'] = self.weather_info.precipi;
+        }else{
+          formData['precipitation-inches'] = '0';
+        }
       }
       self._submitForm(formData, function(res){
         callback(res);
